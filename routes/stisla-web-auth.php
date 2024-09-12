@@ -45,7 +45,7 @@ Route::view('pricing', 'stisla.examples.pricing.index')->name('pricing.index');
 Route::view('invoice', 'stisla.examples.invoice.index')->name('invoice.index');
 
 # PENDUDUK
-Route::resource('persons', PersonController::class);
+// Route::resource('persons', PersonController::class);
 
 # USER MANAGEMENT
 Route::prefix('user-management')->as('user-management.')->group(function () {

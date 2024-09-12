@@ -28,8 +28,10 @@
             </div> --}}
             </div>
             <div class="simple-footer">
-              Copyright &copy;
-              {{ $_since < date('Y') ? $_since . ' - ' . date('Y') : $_since }}
+                Copyright &copy;
+                {{ $_since < date('Y') ? $_since . ' - ' . date('Y') : $_since }}
+                <br>
+                <a href="https://tescoindomaritim.com" target="_blank" rel="noopener noreferrer">PT. Tesco Indomaritim</a>
             </div>
           </div>
         </div>
