@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -62,6 +62,21 @@ return [
             ]) : [],
         ],
 
+        'finger_machine_db' => [
+            'driver' => 'mysql',
+            'host' => env('DB_FINGER_MACHINE_HOST', '127.0.0.1'),
+            'port' => env('DB_FINGER_MACHINE_PORT', '3306'),
+            'database' => env('DB_FINGER_MACHINE_DATABASE', 'forge'),
+            'username' => env('DB_FINGER_MACHINE_USERNAME', 'forge'),
+            'password' => env('DB_FINGER_MACHINE_PASSWORD', ''),
+            'unix_socket' => env('DB_FINGER_MACHINE_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+        
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

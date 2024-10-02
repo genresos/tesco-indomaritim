@@ -21,7 +21,7 @@
         @if ($data->count() > 0 || $isYajra || $isAjaxYajra)
           @if ($canExport)
             <div class="card">
-              <div class="card-header">
+              <!-- <div class="card-header">
                 <h4><i class="{{ $moduleIcon }}"></i> {!! __('Aksi Ekspor <small>(Server Side)</small>') !!}</h4>
                 <div class="card-header-action">
                   @include('stisla.includes.forms.buttons.btn-pdf-download', ['link' => $routePdf])
@@ -29,7 +29,7 @@
                   @include('stisla.includes.forms.buttons.btn-csv-download', ['link' => $routeCsv])
                   @include('stisla.includes.forms.buttons.btn-json-download', ['link' => $routeJson])
                 </div>
-              </div>
+              </div> -->
             </div>
           @endif
 

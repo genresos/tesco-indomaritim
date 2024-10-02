@@ -148,6 +148,15 @@ class DashboardController extends StislaController
                 'bg_color' => 'purple',
             ];
         }
+        if ($user->can('Finger Machine'))
+            $widgets[] = (object)[
+                'title' => 'Finger Machine',
+                'count' => '',
+                'bg'    => 'info',
+                'icon'  => 'fingerprint',
+                'route' => route('finger-machine.all.index'),
+                'bg_color' => 'brown'
+            ];
 
         $logs = $this->activityLogRepository->getMineLatest();
 

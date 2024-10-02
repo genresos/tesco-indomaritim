@@ -36,6 +36,6 @@ class MenuRepository extends Repository
      */
     public function getFullData()
     {
-        return $this->model->with(['group', 'parentMenu', 'childs'])->get();
+        return $this->model->with(['group', 'parentMenu', 'childs'])->orderBy('id','desc')->get();
     }
 }

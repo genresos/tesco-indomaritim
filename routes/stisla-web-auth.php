@@ -22,6 +22,11 @@ use App\Http\Controllers\YoutubeController;
 use App\Http\Middleware\FileManagerPermission;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\FingerMachineController;
+
+
+
+
 # DASHBOARD
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 Route::post('dashboard', [DashboardController::class, 'post']);
@@ -180,3 +185,17 @@ Route::get('testing/modal', [TestingController::class, 'modal']);
 Route::get('dropboxs', [DropboxController::class, 'index'])->name('dropboxs.index');
 Route::post('dropboxs', [DropboxController::class, 'upload'])->name('dropboxs.upload');
 Route::delete('dropboxs', [DropboxController::class, 'destroy'])->name('dropboxs.destroy');
+
+
+
+#HUMAN CAPITAL
+
+Route::prefix('finger-machine')->as('finger-machine.')->group(function () {
+    // Route::get('all', [FingerMachineController::class, 'index'])->name('fingermachine.index');
+    #ALL
+    Route::resource('all', FingerMachineController::class);
+
+    Route::get('detail/{SN}', [FingerMachineController::class, 'transactionFingerMachine'])->name('detail');
+    Route::get('transaction', [FingerMachineController::class, 'getAllTransactionData'])->name('transaction');
+
+});

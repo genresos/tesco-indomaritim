@@ -6,7 +6,7 @@
 
   <section class="section">
     <div class="section-header">
-      <h1>Pricing</h1>
+      <h1>Priciawdawng</h1>
       <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active">
           <a href="{{ route('dashboard.index') }}">{{ __('Dashboard') }}</a>
