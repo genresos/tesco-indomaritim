@@ -58,7 +58,10 @@ class UserManagementController extends StislaController
             'phone_number',
             'birth_date',
             'address',
+            'role',
         ]);
+
+        return $data;
         if ($request->filled('password')) {
             $data['password'] = bcrypt($request->password);
         }
@@ -153,6 +156,7 @@ class UserManagementController extends StislaController
      */
     public function edit(User $user)
     {
+        
         $data = $this->getDetailData($user, false);
         return view('stisla.user-management.users.form', $data);
     }
@@ -167,9 +171,10 @@ class UserManagementController extends StislaController
     public function update(UserRequest $request, User $user)
     {
         $data = $this->getStoreData($request);
+        $roles = array_map('intval', $data['role']);
 
         $userNew = $this->userRepository->update($data, $user->id);
-        $this->userRepository->syncRoles($userNew, $request->role);
+        $this->userRepository->syncRoles($userNew, $roles);
         logUpdate('Pengguna', $user, $userNew);
         $successMessage = successMessageUpdate('Pengguna');
         return redirect()->back()->with('successMessage', $successMessage);

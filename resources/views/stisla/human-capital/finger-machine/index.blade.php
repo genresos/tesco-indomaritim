@@ -25,39 +25,74 @@
         </br>
 
 
-        <div class="row">
-            @foreach ($data as $fingerprint)
-            <div class="col-12 col-md-2 col-lg-2">
-                <div class="pricing" style="padding: 10px;">
-                    <div class="pricing-title" style="font-size: 1.2rem;">
-                        {{ $fingerprint->Alias }} <!-- Tampilkan value dari 'Alias' -->
-                    </div>
-                    <div class="pricing-padding">
-                        <div class="pricing-price">
-                            <div style="font-size: 1.5rem;">
-                                <strong class="fas fa-fingerprint" style="font-size: 2rem;"></strong>
-                            </div>
-                        </div>
-                        <div class="pricing-details">
-                            <div class="pricing-item">
-                                @if (Carbon::parse($fingerprint->LastActivity)->isToday())
-                                    <div class="pricing-item-icon"><i class="fas fa-check"></i></div>
-                                    <div class="pricing-item-label" style="font-size: 0.8rem;">Online</div>
-                                @else
-                                    <div class="pricing-item-icon bg-danger text-white"><i class="fas fa-times"></i></div>
-                                    <div class="pricing-item-label" style="font-size: 0.8rem;">Offline</div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pricing-cta">
-                        <a href="{{ route('finger-machine.detail', ['SN' => $fingerprint->SN]) }}" style="font-size: 0.9rem;">Show Data <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>SN</th>
+                    <th>Alias</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($data as $fingerprint)
+                <tr>
+                    <td>{{ $fingerprint->SN }}</td>
+                    <td>{{ $fingerprint->Alias }}</td>
+                    <td>
+                        @if (Carbon::parse($fingerprint->LastActivity)->isToday())
+                            <span class="text-success"><i class="fas fa-check-circle"></i> Online</span>
+                        @else
+                            <span class="text-danger"><i class="fas fa-times-circle"></i> Offline</span>
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('finger-machine.detail', ['SN' => $fingerprint->SN]) }}" class="btn btn-info btn-sm">
+                            Show Data <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 </section>
+
+<style>
+    .table {
+        width: 100%;
+        margin: 20px 0;
+        border-collapse: collapse;
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #dee2e6;
+    }
+
+    .table thead th {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+    }
+
+    .btn-info:hover {
+        background-color: #138496;
+        border-color: #117a8b;
+    }
+</style>
 
 @endsection
