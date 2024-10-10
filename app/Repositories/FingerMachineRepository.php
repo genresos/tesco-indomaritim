@@ -18,7 +18,7 @@ class FingerMachineRepository extends Repository
      */
     public function __construct()
     {
-        $this->model = new FingerMachine(); 
+        $this->model = new FingerMachine();
     }
 
     /**
@@ -28,33 +28,33 @@ class FingerMachineRepository extends Repository
      */
     public function getMachineData()
     {
-        return $this->model->orderBy('LastActivity','desc')->get();
+        return $this->model->orderBy('LastActivity', 'desc')->get();
     }
 
-    public function getAllTransaction(){
+    public function getAllTransaction()
+    {
         $query = FingerMachineTransaction::select('c.id', 'u.badgenumber as pin', 'u.name', 'c.checktime', 'c.SN as device')
-        ->join('userinfo as u', 'u.userid', '=', 'c.userid')
-        ->from('checkinout as c');
+            ->join('userinfo as u', 'u.userid', '=', 'c.userid')
+            ->from('checkinout as c');
 
 
         // Mengambil tanggal saat ini
         $currentDate = now();
 
-        // Mengambil tanggal 21 bulan sebelumnya
-        $startDate = now()->subMonth()->day(21)->startOfDay();
-        
-        // Menambahkan kondisi untuk filter berdasarkan checktime
-        $query->whereBetween('c.checktime', [$startDate, $currentDate]);
+        $startDate = now()->subMonth()->startOfDay();
 
-        return $query->orderBy('c.id', 'desc')->get();
+        // Menambahkan kondisi untuk filter berdasarkan checktime
+        $query->whereBetween(DB::raw('DATE(c.checktime)'), [$startDate, $currentDate]);
+
+        return $query->orderBy('c.checktime', 'desc')->get();
     }
 
 
     public function getMachineTransaction($SN)
     {
         $query = FingerMachineTransaction::select('c.id', 'u.badgenumber as pin', 'u.name', 'c.checktime', 'c.SN as device')
-        ->join('userinfo as u', 'u.userid', '=', 'c.userid')
-        ->from('checkinout as c');
+            ->join('userinfo as u', 'u.userid', '=', 'c.userid')
+            ->from('checkinout as c');
 
 
         // Mengambil tanggal saat ini
