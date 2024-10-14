@@ -4,7 +4,7 @@
 
 @section('content')
 @php
-    use Carbon\Carbon;
+use Carbon\Carbon;
 @endphp
 <section class="section">
     <div class="section-header">
@@ -19,9 +19,9 @@
     <div class="section-body">
         <h2 class="section-title">All Machine</h2>
         <p class="section-lead">All Finger Machine PT. Tesco Indomaritim.</p>
-        <center>
+        <div>
             <a href="{{ route('finger-machine.transaction') }}" class="btn btn-success">Show All Transaction</a>
-        </center>  
+        </div>
         </br>
 
 
@@ -41,9 +41,9 @@
                     <td>{{ $fingerprint->Alias }}</td>
                     <td>
                         @if (Carbon::parse($fingerprint->LastActivity)->isToday())
-                            <span class="text-success"><i class="fas fa-check-circle"></i> Online</span>
+                        <span class="text-success"><i class="fas fa-check-circle"></i> Online</span>
                         @else
-                            <span class="text-danger"><i class="fas fa-times-circle"></i> Offline</span>
+                        <span class="text-danger"><i class="fas fa-times-circle"></i> Offline</span>
                         @endif
                     </td>
                     <td>
@@ -65,7 +65,8 @@
         border-collapse: collapse;
     }
 
-    .table th, .table td {
+    .table th,
+    .table td {
         padding: 12px;
         text-align: left;
         border: 1px solid #dee2e6;

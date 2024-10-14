@@ -261,12 +261,12 @@ class ComposerStaticInitbfab681bbc0b78f49d3c0a88e008e9db
         ),
         'Yajra\\DataTables\\' => 
         array (
-            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
-            1 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
-            2 => __DIR__ . '/..' . '/yajra/laravel-datatables-fractal/src',
-            3 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
-            4 => __DIR__ . '/..' . '/yajra/laravel-datatables-export/src',
-            5 => __DIR__ . '/..' . '/yajra/laravel-datatables-editor/src',
+            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-buttons/src',
+            1 => __DIR__ . '/..' . '/yajra/laravel-datatables-editor/src',
+            2 => __DIR__ . '/..' . '/yajra/laravel-datatables-export/src',
+            3 => __DIR__ . '/..' . '/yajra/laravel-datatables-fractal/src',
+            4 => __DIR__ . '/..' . '/yajra/laravel-datatables-html/src',
+            5 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
         ),
         'Whoops\\' => 
         array (
@@ -472,8 +472,8 @@ class ComposerStaticInitbfab681bbc0b78f49d3c0a88e008e9db
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -818,6 +818,8 @@ class ComposerStaticInitbfab681bbc0b78f49d3c0a88e008e9db
         'App\\Http\\Controllers\\CrudExampleController' => __DIR__ . '/../..' . '/app/Http/Controllers/CrudExampleController.php',
         'App\\Http\\Controllers\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/DashboardController.php',
         'App\\Http\\Controllers\\DropboxController' => __DIR__ . '/../..' . '/app/Http/Controllers/DropboxController.php',
+        'App\\Http\\Controllers\\EmployeeController' => __DIR__ . '/../..' . '/app/Http/Controllers/EmployeeController.php',
+        'App\\Http\\Controllers\\FingerMachineController' => __DIR__ . '/../..' . '/app/Http/Controllers/FingerMachineController.php',
         'App\\Http\\Controllers\\GroupMenuController' => __DIR__ . '/../..' . '/app/Http/Controllers/GroupMenuController.php',
         'App\\Http\\Controllers\\MenuManagementController' => __DIR__ . '/../..' . '/app/Http/Controllers/MenuManagementController.php',
         'App\\Http\\Controllers\\NotificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/NotificationController.php',
@@ -875,6 +877,9 @@ class ComposerStaticInitbfab681bbc0b78f49d3c0a88e008e9db
         'App\\Models\\ActivityLog' => __DIR__ . '/../..' . '/app/Models/ActivityLog.php',
         'App\\Models\\CommandHistory' => __DIR__ . '/../..' . '/app/Models/CommandHistory.php',
         'App\\Models\\CrudExample' => __DIR__ . '/../..' . '/app/Models/CrudExample.php',
+        'App\\Models\\Employee' => __DIR__ . '/../..' . '/app/Models/Employee.php',
+        'App\\Models\\FingerMachine' => __DIR__ . '/../..' . '/app/Models/FingerMachine.php',
+        'App\\Models\\FingerMachineTransaction' => __DIR__ . '/../..' . '/app/Models/FingerMachineTransaction.php',
         'App\\Models\\LogRequest' => __DIR__ . '/../..' . '/app/Models/LogRequest.php',
         'App\\Models\\Menu' => __DIR__ . '/../..' . '/app/Models/Menu.php',
         'App\\Models\\MenuGroup' => __DIR__ . '/../..' . '/app/Models/MenuGroup.php',
@@ -892,6 +897,8 @@ class ComposerStaticInitbfab681bbc0b78f49d3c0a88e008e9db
         'App\\Repositories\\ActivityLogRepository' => __DIR__ . '/../..' . '/app/Repositories/ActivityLogRepository.php',
         'App\\Repositories\\CrudExampleRepository' => __DIR__ . '/../..' . '/app/Repositories/CrudExampleRepository.php',
         'App\\Repositories\\EmailRepository' => __DIR__ . '/../..' . '/app/Repositories/EmailRepository.php',
+        'App\\Repositories\\EmployeeRepository' => __DIR__ . '/../..' . '/app/Repositories/EmployeeRepository.php',
+        'App\\Repositories\\FingerMachineRepository' => __DIR__ . '/../..' . '/app/Repositories/FingerMachineRepository.php',
         'App\\Repositories\\MenuGroupRepository' => __DIR__ . '/../..' . '/app/Repositories/MenuGroupRepository.php',
         'App\\Repositories\\MenuRepository' => __DIR__ . '/../..' . '/app/Repositories/MenuRepository.php',
         'App\\Repositories\\NotificationRepository' => __DIR__ . '/../..' . '/app/Repositories/NotificationRepository.php',

@@ -23,6 +23,8 @@ use App\Http\Middleware\FileManagerPermission;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\FingerMachineController;
+use App\Http\Controllers\EmployeesController;
+
 
 
 
@@ -197,5 +199,14 @@ Route::prefix('finger-machine')->as('finger-machine.')->group(function () {
 
     Route::get('detail/{SN}', [FingerMachineController::class, 'transactionFingerMachine'])->name('detail');
     Route::get('transaction', [FingerMachineController::class, 'getAllTransactionData'])->name('transaction');
+});
 
+Route::prefix('employees')->as('employees.')->group(function () {
+    // Route::get('all', [FingerMachineController::class, 'index'])->name('fingermachine.index');
+    #ALL
+    // Route::resource('all', FingerMachineController::class);
+
+    // Route::get('detail/{SN}', [FingerMachineController::class, 'transactionFingerMachine'])->name('detail');
+    Route::get('daily-worker', [EmployeesController::class, 'ShowDailyWorker'])->name('daily-worker.show');
+    Route::get('daily-worker/transaction', [EmployeesController::class, 'ShowDailyWorkerAttendance'])->name('daily-worker.attendance');
 });

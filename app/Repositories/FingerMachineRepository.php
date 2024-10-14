@@ -33,7 +33,8 @@ class FingerMachineRepository extends Repository
 
     public function getAllTransaction()
     {
-        $query = FingerMachineTransaction::select('c.id', 'u.badgenumber as pin', 'u.name', 'c.checktime', 'c.SN as device')
+        $query = FingerMachineTransaction::select('c.id', 'u.badgenumber as pin', 'u.name', 'c.checktime', 'c.SN as device', 'fm.Alias as alias')
+            ->join('iclock as fm', 'c.SN', '=', 'fm.SN')
             ->join('userinfo as u', 'u.userid', '=', 'c.userid')
             ->from('checkinout as c');
 
