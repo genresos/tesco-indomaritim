@@ -6,10 +6,8 @@ $canAction = $canUpdate || $canDelete;
 @endphp
 
 <div>
-    <a href="{{ route('employees.daily-worker.attendance') }}" class="btn btn-success">Show Attendance</a>
-    <a href="{{ route('employees.daily-worker.listpayroll') }}" class="btn btn-primary">Payroll</a>
+    <a href="{{ route('employees.daily-worker.attendance') }}" class="btn btn-success">Show All Transaction</a>
     <a href="{{ route('employees.daily-worker.calculate') }}" class="btn btn-warning">Calculate Payroll</a>
-
 </div>
 
 
@@ -27,7 +25,6 @@ $canAction = $canUpdate || $canDelete;
             <th>{{ __('Bank Account No') }}</th>
             <th>{{ __('Bank Account Name') }}</th>
             <th>{{ __('Daily Rate') }}</th>
-            <th>{{ __('Payroll Type') }}</th>
             <th>{{ __('Action') }}</th> <!-- New Action Header -->
         </tr>
     </thead>
@@ -43,7 +40,6 @@ $canAction = $canUpdate || $canDelete;
             <td>{{ $item->bank_account_no }}</td>
             <td>{{ $item->bank_account_name }}</td>
             <td>{{ $item->rate }}</td>
-            <td>{{ $item->type }}</td>
 
             <td>
                 <a href="#" class="btn btn-primary">

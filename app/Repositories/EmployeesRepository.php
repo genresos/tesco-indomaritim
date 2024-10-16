@@ -97,7 +97,23 @@ class EmployeesRepository extends Repository
 
     public function getDailyWorker()
     {
-        $query = DailyWorker::select('badgenumber', 'name', 'daily_rate', 'site')->get();
+        $query = DB::table('daily_worker as daily_workers')->select(
+            'daily_workers.badgenumber',
+            'daily_workers.name',
+            'daily_workers.site',
+            'daily_workers.department',
+            'daily_workers.status',
+            'daily_workers.rate',
+            'daily_workers.bank_name',
+            'daily_workers.bank_account_no',
+            'daily_workers.bank_account_name',
+            'daily_worker_salary_type.type' // Ganti dengan kolom yang ingin diambil dari tabel salary_type
+        )
+            ->join('daily_worker_salary_type', 'daily_worker_salary_type.id', '=', 'daily_workers.salary_type')
+            ->whereNotNull('daily_workers.rate')
+            ->get();
+
+
 
         return $query;
     }
@@ -109,6 +125,17 @@ class EmployeesRepository extends Repository
             ->select('t.id', 't.badgenumber', 'u.name', 't.checktime')
             ->join('daily_worker as u', 't.badgenumber', '=', 'u.badgenumber')
             ->whereBetween('t.checktime', [now()->subMonth(), now()])
+            ->whereNotNull('u.rate')
+            ->get();
+
+        return $results;
+    }
+
+    public function getPayrollListDailyWorker()
+    {
+        $results = DB::table('daily_worker_salary as s')
+            ->join('daily_worker as u', 's.badgenumber', '=', 'u.badgenumber')
+            ->select('u.*', 's.*')
             ->get();
 
         return $results;

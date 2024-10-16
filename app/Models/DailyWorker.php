@@ -14,8 +14,14 @@ class DailyWorker extends Model
     protected $fillable = [
         'badgenumber',
         'name',
-        'daily_rate',
+        'rate',
+        'department',
+        'status',
+        'rate',
         'site',
+        'bank_name',
+        'bank_account_no',
+        'bank_account_name'
     ];
 
     public $timestamps = true;

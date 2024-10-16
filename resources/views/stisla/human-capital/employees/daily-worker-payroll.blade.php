@@ -7,9 +7,7 @@ $canAction = $canUpdate || $canDelete;
 
 <div>
     <a href="{{ route('employees.daily-worker.attendance') }}" class="btn btn-success">Show Attendance</a>
-    <a href="{{ route('employees.daily-worker.listpayroll') }}" class="btn btn-primary">Payroll</a>
     <a href="{{ route('employees.daily-worker.calculate') }}" class="btn btn-warning">Calculate Payroll</a>
-
 </div>
 
 
@@ -18,38 +16,46 @@ $canAction = $canUpdate || $canDelete;
 <table class="table table-striped" id="datatable" data-export="true" data-title="{{ $title }}">
     <thead>
         <tr>
-            <th>{{ __('PIN') }}</th>
+            <th>{{ __('Periode') }}</th>
             <th>{{ __('Name') }}</th>
-            <th>{{ __('Site') }}</th>
             <th>{{ __('Department') }}</th>
-            <th>{{ __('Family Status') }}</th>
-            <th>{{ __('Bank Name') }}</th>
-            <th>{{ __('Bank Account No') }}</th>
-            <th>{{ __('Bank Account Name') }}</th>
-            <th>{{ __('Daily Rate') }}</th>
-            <th>{{ __('Payroll Type') }}</th>
-            <th>{{ __('Action') }}</th> <!-- New Action Header -->
+            <th>{{ __('Status') }}</th>
+            <th>{{ __('Work Days') }}</th>
+            <th>{{ __('Rapel') }}</th>
+            <th>{{ __('Bruto') }}</th>
+            <th>{{ __('Loan') }}</th>
+            <th>{{ __('Tax') }}</th>
+            <th>{{ __('Net Income') }}</th>
+            <th>{{ __('Actual Paid') }}</th>
+            <th>{{ __('GAP') }}</th>
+            <th>{{ __('Bank') }}</th>
+            <th>{{ __('Bank No.') }}</th>
+            <th>{{ __('Account Bank Name') }}</th>
+
+
+
         </tr>
     </thead>
     <tbody>
         @foreach ($data as $item)
         <tr>
-            <td>{{ $item->badgenumber }}</td>
+            <td>{{ $item->periode }}</td>
             <td>{{ $item->name }}</td>
-            <td>{{ $item->site }}</td>
             <td>{{ $item->department }}</td>
             <td>{{ $item->status }}</td>
+            <td>{{ $item->working_days }}</td>
+            <td>0</td>
+            <td>{{ $item->gross_income }}</td>
+            <td>0</td>
+            <td>{{ $item->tax }}</td>
+            <td>{{ $item->net_income }}</td>
+            <td>0</td>
+            <td>0</td>
             <td>{{ $item->bank_name }}</td>
             <td>{{ $item->bank_account_no }}</td>
             <td>{{ $item->bank_account_name }}</td>
-            <td>{{ $item->rate }}</td>
-            <td>{{ $item->type }}</td>
 
-            <td>
-                <a href="#" class="btn btn-primary">
-                    <i class="fas fa-pencil-alt"></i> Edit
-                </a> <!-- Edit Button with Pencil Icon -->
-            </td>
+
         </tr>
         @endforeach
     </tbody>

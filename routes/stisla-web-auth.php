@@ -207,6 +207,11 @@ Route::prefix('employees')->as('employees.')->group(function () {
     // Route::resource('all', FingerMachineController::class);
 
     // Route::get('detail/{SN}', [FingerMachineController::class, 'transactionFingerMachine'])->name('detail');
-    Route::get('daily-worker', [EmployeesController::class, 'ShowDailyWorker'])->name('daily-worker.show');
+    Route::get('daily-worker/show', [EmployeesController::class, 'ShowDailyWorker'])->name('daily-worker.show');
+    Route::get('daily-worker', [EmployeesController::class, 'ShowDailyWorker'])->name('daily-worker.index');
+
+    Route::post('daily-worker/payroll', [EmployeesController::class, 'storePayrollDailyWorker'])->name('daily-worker.store');
+    Route::get('daily-worker/payroll', [EmployeesController::class, 'CalculatePayrollCreate'])->name('daily-worker.calculate');
+    Route::get('daily-worker/payroll-list', [EmployeesController::class, 'PayrollDailyWorkerList'])->name('daily-worker.listpayroll');
     Route::get('daily-worker/transaction', [EmployeesController::class, 'ShowDailyWorkerAttendance'])->name('daily-worker.attendance');
 });
