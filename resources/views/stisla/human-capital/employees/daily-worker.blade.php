@@ -42,13 +42,12 @@ $canAction = $canUpdate || $canDelete;
             <td>{{ $item->bank_name }}</td>
             <td>{{ $item->bank_account_no }}</td>
             <td>{{ $item->bank_account_name }}</td>
-            <td>{{ $item->rate }}</td>
+            <td>Rp {{ number_format($item->rate, 0, ',', '.') }}</td> <!-- Format rate as Rupiah -->
             <td>{{ $item->type }}</td>
 
             <td>
-                <a href="#" class="btn btn-primary">
-                    <i class="fas fa-pencil-alt"></i> Edit
-                </a> <!-- Edit Button with Pencil Icon -->
+                @include('stisla.includes.forms.buttons.btn-edit', ['link' => route('employees.daily-worker.edit', [$item->badgenumber])])
+
             </td>
         </tr>
         @endforeach

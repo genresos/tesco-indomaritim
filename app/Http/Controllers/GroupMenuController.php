@@ -110,6 +110,7 @@ class GroupMenuController extends StislaController
     public function edit(MenuGroup $groupMenu)
     {
         $data = $this->getDetailData($groupMenu);
+
         return view('stisla.group-menus.form', $data);
     }
 

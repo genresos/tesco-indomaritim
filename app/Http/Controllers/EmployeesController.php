@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Repositories\EmployeesRepository;
 use App\Http\Requests\DailyWorkerRequest;
 use Illuminate\Support\Facades\DB;
+use App\Models\DailyWorker;
 
 class EmployeesController extends StislaController
 {
@@ -86,7 +87,67 @@ class EmployeesController extends StislaController
     }
 
     /**
-     * save new group menu to db
+     * showing edit worker page
+     *\
+     */
+    public function editWorker($dailyWorker)
+    {
+        $data = DailyWorker::where('badgenumber', $dailyWorker)->first(); // Menggunakan first() jika hanya ingin satu record
+
+        // Pastikan data tidak null sebelum mengirim ke view
+        if (!$data) {
+            // Anda dapat menangani situasi di mana data tidak ditemukan, misalnya redirect dengan pesan error
+            return redirect()->back()->with('error', 'Daily worker not found.');
+        }
+
+        return view('stisla.human-capital.employees.daily-worker-edit', compact('data'));
+    }
+
+    public function updateWorker(Request $request, $dailyWorker)
+    {
+        // Validasi input
+        $request->validate([
+            'badgenumber' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'site' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+            'bank_name' => 'required|string|max:255',
+            'bank_account_no' => 'required|string|max:255',
+            'bank_account_name' => 'required|string|max:255',
+            'rate' => 'required|numeric|min:0',
+            'salary_type' => 'required|in:1,2,3', // Validasi untuk Payroll Type
+        ]);
+
+        // Temukan pekerja berdasarkan badgenumber
+        $worker = DailyWorker::where('badgenumber', $dailyWorker)->first();
+
+        // Jika pekerja tidak ditemukan, redirect dengan pesan error
+        if (!$worker) {
+            return redirect()->back()->with('error', 'Daily worker not found.');
+        }
+
+        // Update data pekerja
+        $worker->badgenumber = $request->badgenumber;
+        $worker->name = $request->name;
+        $worker->site = $request->site;
+        $worker->department = $request->department;
+        $worker->bank_name = $request->bank_name;
+        $worker->bank_account_no = $request->bank_account_no;
+        $worker->bank_account_name = $request->bank_account_name;
+        $worker->rate = $request->rate;
+        $worker->salary_type = $request->salary_type;
+
+        // Simpan perubahan ke database
+        $worker->save();
+
+        // Redirect ke halaman dengan pesan sukses
+
+        return redirect()->route('employees.daily-worker.index')->with('successMessage', 'Daily worker updated successfully.');
+    }
+
+
+    /**
+     * save new worker to db
      *
      * @param DailyWorkerRequest $request
      * @return Response

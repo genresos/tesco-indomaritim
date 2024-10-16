@@ -45,10 +45,10 @@ $canAction = $canUpdate || $canDelete;
             <td>{{ $item->status }}</td>
             <td>{{ $item->working_days }}</td>
             <td>0</td>
-            <td>{{ $item->gross_income }}</td>
+            <td>Rp {{ number_format($item->gross_income, 0, ',', '.') }}</td>
             <td>0</td>
-            <td>{{ $item->tax }}</td>
-            <td>{{ $item->net_income }}</td>
+            <td>Rp {{ number_format($item->tax, 0, ',', '.') }}</td>
+            <td>Rp {{ number_format($item->net_income, 0, ',', '.') }}</td>
             <td>0</td>
             <td>0</td>
             <td>{{ $item->bank_name }}</td>

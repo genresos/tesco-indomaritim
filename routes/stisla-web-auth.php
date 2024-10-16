@@ -209,6 +209,8 @@ Route::prefix('employees')->as('employees.')->group(function () {
     // Route::get('detail/{SN}', [FingerMachineController::class, 'transactionFingerMachine'])->name('detail');
     Route::get('daily-worker/show', [EmployeesController::class, 'ShowDailyWorker'])->name('daily-worker.show');
     Route::get('daily-worker', [EmployeesController::class, 'ShowDailyWorker'])->name('daily-worker.index');
+    Route::get('daily-worker/edit/{pin}', [EmployeesController::class, 'editWorker'])->name('daily-worker.edit');
+    Route::put('daily-worker/update/{pin}', [EmployeesController::class, 'updateWorker'])->name('daily-worker.update');
 
     Route::post('daily-worker/payroll', [EmployeesController::class, 'storePayrollDailyWorker'])->name('daily-worker.store');
     Route::get('daily-worker/payroll', [EmployeesController::class, 'CalculatePayrollCreate'])->name('daily-worker.calculate');

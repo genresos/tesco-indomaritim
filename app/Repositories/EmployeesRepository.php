@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Employee;
-use App\Models\DailyWorker;
 use App\Models\DailyWorkerAttendance;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
