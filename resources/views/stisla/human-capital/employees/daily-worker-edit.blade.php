@@ -1,7 +1,9 @@
 @extends('stisla.layouts.app')
 
 @section('content')
-
+<div class="section-header">
+  <h1>Edit</h1>
+</div>
 <div class="section-body">
 
   <div class="row">
