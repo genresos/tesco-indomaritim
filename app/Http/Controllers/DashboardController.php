@@ -161,7 +161,7 @@ class DashboardController extends StislaController
         if ($user->can('Daily Worker'))
             $widgets[] = (object)[
                 'title' => 'Daily Worker',
-                'count' => '364',
+                'count' => '39',
                 'bg'    => 'info',
                 'icon'  => 'users',
                 'route' => route('employees.daily-worker.show'),
