@@ -44,16 +44,36 @@
               </div>
 
               <div class="col-md-6">
-                @include('stisla.includes.forms.inputs.input', [
-                'id' => 'site',
-                'name' => 'site',
-                'label' => __('Site'),
-                'type' => 'text',
-                'value' => $data->site,
-                'required' => true,
-                'icon' => 'fas fa-building',
-                ])
+                  @include('stisla.includes.forms.inputs.input', [
+                      'id' => 'nik',
+                      'name' => 'nik',
+                      'label' => __('NIK'),
+                      'type' => 'number', // Change type to 'number'
+                      'value' => $data->nik,
+                      'required' => true,
+                      'icon' => 'fas fa-credit-card',
+                      'attributes' => [
+                          'min' => '0', // Optional: to prevent negative numbers
+                          'step' => '1', // Optional: to ensure whole numbers only
+                      ],
+                  ])
               </div>
+
+              <div class="col-md-6">
+                                  @include('stisla.includes.forms.selects.select', [
+                                      'id' => 'site',
+                                      'name' => 'site',
+                                      'label' => __('Pilih Site'),
+                                      'options' => [
+                                          'TLD' => 'TLD',
+                                          'TM5' => 'TM5',
+                                          'TM7' => 'TM7',
+                                      ],
+                                      'selected' => $data->site,
+                                      'with_all' => true,
+                                  ])
+              </div>
+
 
               <div class="col-md-6">
                 @include('stisla.includes.forms.inputs.input', [
@@ -111,6 +131,44 @@
                 'type' => 'number',
                 'value' => $data->rate,
                 'required' => true,
+                'icon' => 'fas fa-money-bill-wave',
+                'step' => 'any', // Allow decimal values
+                ])
+              </div>
+
+              <div class="col-md-6">
+                @include('stisla.includes.forms.inputs.input', [
+                'id' => 'meal_allowance_perday',
+                'name' => 'meal_allowance_perday',
+                'label' => __('Meal Allowance Per Day'),
+                'type' => 'number',
+                'value' => $data->meal_allowance_perday,
+                'required' => false,
+                'icon' => 'fas fa-money-bill-wave',
+                'step' => 'any', // Allow decimal values
+                ])
+              </div>
+
+              <div class="col-md-6">
+                @include('stisla.includes.forms.inputs.input', [
+                'id' => 'personal_loan',
+                'name' => 'personal_loan',
+                'label' => __('Personal Loan'),
+                'type' => 'number',
+                'value' => $data->personal_loan,
+                'required' => false,
+                'icon' => 'fas fa-money-bill-wave',
+                'step' => 'any', // Allow decimal values
+                ])
+              </div>
+              <div class="col-md-6">
+                @include('stisla.includes.forms.inputs.input', [
+                'id' => 'installment_loan',
+                'name' => 'installment_loan',
+                'label' => __('Installment Loan'),
+                'type' => 'number',
+                'value' => $data->installment_loan,
+                'required' => false,
                 'icon' => 'fas fa-money-bill-wave',
                 'step' => 'any', // Allow decimal values
                 ])

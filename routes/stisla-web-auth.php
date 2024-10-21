@@ -216,4 +216,8 @@ Route::prefix('employees')->as('employees.')->group(function () {
     Route::get('daily-worker/payroll', [EmployeesController::class, 'CalculatePayrollCreate'])->name('daily-worker.calculate');
     Route::get('daily-worker/payroll-list', [EmployeesController::class, 'PayrollDailyWorkerList'])->name('daily-worker.listpayroll');
     Route::get('daily-worker/transaction', [EmployeesController::class, 'ShowDailyWorkerAttendance'])->name('daily-worker.attendance');
+    Route::get('daily-worker/attendance/upload', [EmployeesController::class, 'FormUploadAttendance'])->name('daily-worker.attendance-upload');
+    Route::post('daily-worker/attendance/upload', [EmployeesController::class, 'StoreUploadAttendance'])->name('daily-worker.attendance-upload-store');
+    Route::get('daily-worker/test/{fromDate?}/{toDate?}', [EmployeesController::class, 'test'])->name('daily-worker.attendance-test');
+
 });

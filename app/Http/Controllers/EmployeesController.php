@@ -7,6 +7,13 @@ use App\Repositories\EmployeesRepository;
 use App\Http\Requests\DailyWorkerRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\DailyWorker;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DailyWorkerAttendanceExport;
+use App\Imports\CsvImport;
+use DatePeriod;
+use DateTime;
+use DateInterval;
 
 class EmployeesController extends StislaController
 {
@@ -48,7 +55,7 @@ class EmployeesController extends StislaController
 
         $defaultData = $this->getDefaultDataIndex(__('Daily Worker'), 'Daily Worker List', 'human-capital');
         $data        = array_merge(['data' => $data], $defaultData);
-        return view('stisla.human-capital.employees.daily-worker', $data);
+        return view('stisla.human-capital.employees.daily-worker', $data);  
     }
 
     public function ShowDailyWorkerAttendance()
@@ -87,6 +94,179 @@ class EmployeesController extends StislaController
     }
 
     /**
+     * showing add new menu page
+     *
+     * @return Response
+     */
+    public function FormUploadAttendance()
+    {
+        $title         = __('Upload Attendance');
+        $fullTitle     = __('Upload Attendance Daily Worker');
+        $defaultData   = $this->getDefaultDataCreate($title, 'employees.daily-worker');
+
+        return view('stisla.human-capital.employees.daily-worker-attendance-form', array_merge($defaultData, [
+            'fullTitle'     => $fullTitle,
+        ]));
+    }
+
+    public function StoreUploadAttendance(Request $request)
+    {
+     
+        if (!$request->hasFile('attendance') || !$request->file('attendance')->isValid()) {
+            return redirect()->back()->with('error', 'File attendance harus diunggah dan valid!');
+        }
+        
+        $file = $request->file('attendance');
+        if ($file->getClientOriginalExtension() != 'csv') {
+            return redirect()->route('employees.daily-worker.attendance-upload')->with('error', 'Format file tidak sesuai! Harus dalam format CSV.');        
+
+        }
+
+        $path = $file->getRealPath();
+
+        if (($handle = fopen($file->getRealPath(), 'r')) !== false) {
+            // Skip the first row
+            fgetcsv($handle);
+
+            DB::beginTransaction();
+            try {
+
+                  // Read and process the remaining rows
+                while (($data = fgetcsv($handle)) !== false) {
+                    DB::table('daily_worker_attendance')->updateOrInsert(
+                        [
+                            'badgenumber' => $data[0],
+                            'checktime' => $data[1]
+                        ],
+                        [
+                            'badgenumber' => $data[0],
+                            'checktime' => $data[1],
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now()
+                        ]
+                    );
+
+                }
+                fclose($handle);
+    
+                // Commit Transaction
+                DB::commit();
+    
+                // If everything is fine, proceed with the upload logic
+                $successMessage = successMessageCreate("Attendance");
+                
+                return redirect()->route('employees.daily-worker.attendance-upload')->with('successMessage', $successMessage);     
+
+            } catch (Exception $e) {
+                // Rollback Transaction
+                DB::rollback();
+            }
+        
+          
+        }
+          
+
+    }
+
+    public function test(Request $request){
+        $fromDate = $request->fromDate;
+        $toDate = $request->toDate;
+
+        // Validasi jika salah satu variabel kosong atau null
+        if (empty($fromDate) || empty($toDate)) {
+            return redirect()->back()->with('error', 'Pastikan tanggal benar !');
+
+        }
+
+        // Validasi jika fromDate lebih besar dari toDate
+        if ($fromDate > $toDate) {
+            return redirect()->back()->with('error', 'Pastikan tanggal benar !');
+        }
+
+        // Jika semua validasi lulus
+        return response()->json(['success' => true, 'message' => 'Valid dates.']);
+
+        $data = DB::table('daily_worker_attendance as worker_att')
+            ->join('daily_worker as worker', 'worker.badgenumber', '=', 'worker_att.badgenumber')
+            ->select('worker_att.*', 'worker.name')
+            ->whereBetween(DB::raw('date(worker_att.checktime)'), [$fromDate, $toDate])
+            ->get();
+
+        $result = [];
+
+        // Grouping data by badgenumber and date
+        foreach ($data as $entry) {
+            $badgenumber = $entry->badgenumber; // Access property using ->
+            $date = substr($entry->checktime, 0, 10); // Extract date (YYYY-MM-DD)
+            $time = substr($entry->checktime, 11, 5); // Extract time (HH:MM)
+
+            // Initialize if not already set
+            if (!isset($result[$badgenumber])) {
+                $result[$badgenumber] = [
+                    "badgenumber" => $badgenumber.'_'.$entry->name,
+                    'times' => [] // Add a times array to hold min and max
+                ];
+            }
+
+            // Initialize date array if not already set
+            if (!isset($result[$badgenumber]['times'][$date])) {
+                $result[$badgenumber]['times'][$date] = [
+                    'cek_in' => null,
+                    'cek_out' => null,
+                ];
+            }
+
+            // Compare times to find cek_in (before noon) and cek_out (after noon)
+            if ($time < '12:00') {
+                // If this time is before noon, check for cek_inimum
+                if ($result[$badgenumber]['times'][$date]['cek_in'] === null || $time < $result[$badgenumber]['times'][$date]['cek_in']) {
+                    $result[$badgenumber]['times'][$date]['cek_in'] = $time;
+                }
+            } else {
+                // If this time is after noon, check for cek_outimum
+                if ($result[$badgenumber]['times'][$date]['cek_out'] === null || $time > $result[$badgenumber]['times'][$date]['cek_out']) {
+                    $result[$badgenumber]['times'][$date]['cek_out'] = $time;
+                }
+            }
+        }
+
+        // Adding dynamic dates between fromDate and toDate
+        $datePeriod = new DatePeriod(
+            new DateTime($fromDate),
+            new DateInterval('P1D'), // 1 day interval
+            new DateTime($toDate . ' +1 day') // Include end date
+        );
+
+        foreach ($datePeriod as $date) {
+            $formattedDate = $date->format('Y-m-d');
+
+            // If no data for this date, initialize with null cek_in and max
+            foreach ($result as $badgenumber => $entry) {
+                if (!isset($entry['times'][$formattedDate])) {
+                    $result[$badgenumber]['times'][$formattedDate] = [
+                        'cek_in' => null,
+                        'max' => null,
+                    ];
+                }
+            }
+        }
+
+        // Formatting the final result
+        $finalResult = [];
+        foreach ($result as $badgenumber => $entry) {
+            $finalEntry = array_merge(["badgenumber" => $entry['badgenumber']], $entry['times']);
+            $finalResult[] = $finalEntry;
+        }
+
+        // Display the result
+        // return json_encode($finalResult, JSON_PRETTY_PRINT);
+
+        return Excel::download(new DailyWorkerAttendanceExport($finalResult), 'DailyWorkerAttendanceExport.xlsx');
+
+    }
+
+
+    /**
      * showing edit worker page
      *\
      */
@@ -109,12 +289,16 @@ class EmployeesController extends StislaController
         $request->validate([
             'badgenumber' => 'required|integer',
             'name' => 'required|string|max:255',
+            'nik' => 'required|string|max:16',
             'site' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'bank_name' => 'required|string|max:255',
             'bank_account_no' => 'required|string|max:255',
             'bank_account_name' => 'required|string|max:255',
             'rate' => 'required|numeric|min:0',
+            'personal_loan' => 'required|numeric|min:0',
+            'installment_loan' => 'required|numeric|min:0',
+            'meal_allowance_perday' => 'required|numeric|min:0',
             'salary_type' => 'required|in:1,2,3', // Validasi untuk Payroll Type
         ]);
 
@@ -129,12 +313,16 @@ class EmployeesController extends StislaController
         // Update data pekerja
         $worker->badgenumber = $request->badgenumber;
         $worker->name = $request->name;
+        $worker->nik = $request->nik;
         $worker->site = $request->site;
         $worker->department = $request->department;
         $worker->bank_name = $request->bank_name;
         $worker->bank_account_no = $request->bank_account_no;
         $worker->bank_account_name = $request->bank_account_name;
         $worker->rate = $request->rate;
+        $worker->meal_allowance_perday = $request->meal_allowance_perday;
+        $worker->personal_loan = $request->personal_loan;
+        $worker->installment_loan = $request->installment_loan;
         $worker->salary_type = $request->salary_type;
 
         // Simpan perubahan ke database
