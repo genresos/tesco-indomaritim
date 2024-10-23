@@ -161,7 +161,7 @@ class EmployeesController extends StislaController
         }
     }
 
-    public function test(Request $request)
+    public function ExportAttendanceDailyWorker(Request $request)
     {
         $fromDate = $request->fromDate;
         $toDate = $request->toDate;
@@ -175,9 +175,6 @@ class EmployeesController extends StislaController
         if ($fromDate > $toDate) {
             return redirect()->back()->with('error', 'Pastikan tanggal benar !');
         }
-
-        // Jika semua validasi lulus
-        return response()->json(['success' => true, 'message' => 'Valid dates.']);
 
         $data = DB::table('daily_worker_attendance as worker_att')
             ->join('daily_worker as worker', 'worker.badgenumber', '=', 'worker_att.badgenumber')
