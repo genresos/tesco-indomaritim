@@ -46,7 +46,7 @@ $canAction = $canUpdate || $canDelete;
             <td>{{ $item->working_days }}</td>
             <td>0</td>
             <td>Rp {{ number_format($item->gross_income, 0, ',', '.') }}</td>
-            <td>0</td>
+            <td>Rp {{ number_format($item->loan, 0, ',', '.') }}</td>
             <td>Rp {{ number_format($item->tax, 0, ',', '.') }}</td>
             <td>Rp {{ number_format($item->net_income, 0, ',', '.') }}</td>
             <td>0</td>
