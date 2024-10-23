@@ -50,8 +50,8 @@
             </div>
             <div class="col-md-6 mx-auto">
               <div class="form-group">
-                <label for="salary_type">{{ __('Site Work') }}</label>
-                <select id="salary_type" name="salary_type" class="form-control" required>
+                <label for="site">{{ __('Site Work') }}</label>
+                <select id="site" name="site" class="form-control" required>
                   <option value="" disabled selected>{{ __('Select Site Work') }}</option>
                   <option value="TLD">Tulodong</option>
                   <option value="TM5">TM 5 Bekasi</option>

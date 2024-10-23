@@ -55,7 +55,7 @@ class EmployeesController extends StislaController
 
         $defaultData = $this->getDefaultDataIndex(__('Daily Worker'), 'Daily Worker List', 'human-capital');
         $data        = array_merge(['data' => $data], $defaultData);
-        return view('stisla.human-capital.employees.daily-worker', $data);  
+        return view('stisla.human-capital.employees.daily-worker', $data);
     }
 
     public function ShowDailyWorkerAttendance()
@@ -111,15 +111,14 @@ class EmployeesController extends StislaController
 
     public function StoreUploadAttendance(Request $request)
     {
-     
+
         if (!$request->hasFile('attendance') || !$request->file('attendance')->isValid()) {
             return redirect()->back()->with('error', 'File attendance harus diunggah dan valid!');
         }
-        
+
         $file = $request->file('attendance');
         if ($file->getClientOriginalExtension() != 'csv') {
-            return redirect()->route('employees.daily-worker.attendance-upload')->with('error', 'Format file tidak sesuai! Harus dalam format CSV.');        
-
+            return redirect()->route('employees.daily-worker.attendance-upload')->with('error', 'Format file tidak sesuai! Harus dalam format CSV.');
         }
 
         $path = $file->getRealPath();
@@ -131,7 +130,7 @@ class EmployeesController extends StislaController
             DB::beginTransaction();
             try {
 
-                  // Read and process the remaining rows
+                // Read and process the remaining rows
                 while (($data = fgetcsv($handle)) !== false) {
                     DB::table('daily_worker_attendance')->updateOrInsert(
                         [
@@ -145,37 +144,31 @@ class EmployeesController extends StislaController
                             'updated_at' => Carbon::now()
                         ]
                     );
-
                 }
                 fclose($handle);
-    
+
                 // Commit Transaction
                 DB::commit();
-    
+
                 // If everything is fine, proceed with the upload logic
                 $successMessage = successMessageCreate("Attendance");
-                
-                return redirect()->route('employees.daily-worker.attendance-upload')->with('successMessage', $successMessage);     
 
+                return redirect()->route('employees.daily-worker.attendance-upload')->with('successMessage', $successMessage);
             } catch (Exception $e) {
                 // Rollback Transaction
                 DB::rollback();
             }
-        
-          
         }
-          
-
     }
 
-    public function test(Request $request){
+    public function test(Request $request)
+    {
         $fromDate = $request->fromDate;
         $toDate = $request->toDate;
 
         // Validasi jika salah satu variabel kosong atau null
         if (empty($fromDate) || empty($toDate)) {
             return redirect()->back()->with('error', 'Pastikan tanggal benar !');
-
         }
 
         // Validasi jika fromDate lebih besar dari toDate
@@ -203,7 +196,7 @@ class EmployeesController extends StislaController
             // Initialize if not already set
             if (!isset($result[$badgenumber])) {
                 $result[$badgenumber] = [
-                    "badgenumber" => $badgenumber.'_'.$entry->name,
+                    "badgenumber" => $badgenumber . '_' . $entry->name,
                     'times' => [] // Add a times array to hold min and max
                 ];
             }
@@ -262,7 +255,6 @@ class EmployeesController extends StislaController
         // return json_encode($finalResult, JSON_PRETTY_PRINT);
 
         return Excel::download(new DailyWorkerAttendanceExport($finalResult), 'DailyWorkerAttendanceExport.xlsx');
-
     }
 
 
@@ -344,7 +336,9 @@ class EmployeesController extends StislaController
     {
         $data = $request->only([
             'from_date',
-            'to_date'
+            'to_date',
+            'salary_type',
+            'site'
         ]);
 
         if ($request->from_date > $request->to_date) {
@@ -375,10 +369,15 @@ class EmployeesController extends StislaController
                 'daily_workers.bank_name',
                 'daily_workers.bank_account_no',
                 'daily_workers.bank_account_name',
+                'daily_workers.meal_allowance_perday',
+                'daily_workers.personal_loan',
+                'daily_workers.installment_loan',
                 'daily_worker_salary_type.type' // Ganti dengan kolom yang ingin diambil dari tabel salary_type
             )
                 ->join('daily_worker_salary_type', 'daily_worker_salary_type.id', '=', 'daily_workers.salary_type')
                 ->whereNotNull('daily_workers.rate')
+                ->where('daily_workers.site', $data['site'])
+                ->where('daily_worker_salary_type.id', $data['salary_type'])
                 ->get();
 
             foreach ($query as $data) {
@@ -393,11 +392,16 @@ class EmployeesController extends StislaController
                     ->groupBy(DB::raw('DATE(checktime)'))
                     ->get();
 
+                $sumLoan = DB::table('daily_worker_salary_loan')
+                    ->where('badgenumber', $data->badgenumber)
+                    ->sum('amount');
+
                 $count_total_attendance = count($total_attendance);
                 $income = ($data->rate * count($total_attendance));
                 $rapel = 0;
-                $loan = 0;
+                $loan = ($sumLoan >= $data->personal_loan) ? 0 : round($data->personal_loan / $data->installment_loan);
                 $actual_paid = 0;
+                $meal_allowance = ($data->meal_allowance_perday * 50000);
 
                 if ($data->status == 'TK/0') {
                     $totalpendapatansetahun = 54000000;
@@ -421,10 +425,10 @@ class EmployeesController extends StislaController
                     $tax = ($gross_income - $ptkp_per_week) * 0.05;
                 }
 
-                $net_income = ($gross_income - $loan - $tax);
+                $net_income = ($gross_income - $loan - $tax) + $meal_allowance;
                 $gap = $net_income - $net_income;
 
-                DB::table('daily_worker_salary')->insert(
+                $salary = DB::table('daily_worker_salary')->insertGetId(
                     [
                         'periode' => $periode,
                         'badgenumber' => $data->badgenumber,
@@ -438,6 +442,23 @@ class EmployeesController extends StislaController
                         'created_by' => 1
                     ]
                 );
+
+                if ($loan > 0) {
+                    DB::table('daily_worker_salary_loan')->insert(
+                        [
+                            'badgenumber' => $data->badgenumber,
+                            'amount' => $loan,
+                            'salary_id' => $salary
+                        ]
+                    );
+                }
+
+                // DB::table('daily_worker_salary_loan')
+                //     ->where('badgenumber', $data->badgenumber)->update(
+                //         [
+                //             'meal_allowance_perday' => 0
+                //         ]
+                //     );
             }
 
             DB::commit();
