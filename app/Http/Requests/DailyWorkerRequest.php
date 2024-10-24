@@ -24,8 +24,8 @@ class DailyWorkerRequest extends FormRequest
     public function rules()
     {
         return [
-            'from_date' => 'required',
-            'to_date' => 'required'
+            'salary_type' => 'required',
+            'site' => 'required'
         ];
     }
 }

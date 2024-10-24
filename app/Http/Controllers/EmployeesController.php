@@ -14,6 +14,7 @@ use App\Imports\CsvImport;
 use DatePeriod;
 use DateTime;
 use DateInterval;
+use Auth;
 
 class EmployeesController extends StislaController
 {
@@ -49,8 +50,10 @@ class EmployeesController extends StislaController
     //     ]);
     // }
 
+
     public function ShowDailyWorker()
     {
+
         $data = $this->employeesRepository->getDailyWorker();
 
         $defaultData = $this->getDefaultDataIndex(__('Daily Worker'), 'Daily Worker List', 'human-capital');
@@ -288,6 +291,7 @@ class EmployeesController extends StislaController
             'personal_loan' => 'required|numeric|min:0',
             'installment_loan' => 'required|numeric|min:0',
             'meal_allowance_perday' => 'required|numeric|min:0',
+            'rapel' => 'required|numeric|min:0',
             'salary_type' => 'required|in:1,2,3', // Validasi untuk Payroll Type
         ]);
 
@@ -312,6 +316,7 @@ class EmployeesController extends StislaController
         $worker->meal_allowance_perday = $request->meal_allowance_perday;
         $worker->personal_loan = $request->personal_loan;
         $worker->installment_loan = $request->installment_loan;
+        $worker->rapel = $request->rapel;
         $worker->salary_type = $request->salary_type;
 
         // Simpan perubahan ke database
@@ -329,28 +334,76 @@ class EmployeesController extends StislaController
      * @param DailyWorkerRequest $request
      * @return Response
      */
+
+    function nextDatePeriode($tanggalAwal, $jumlahHari)
+    {
+        $tanggal = new DateTime($tanggalAwal);
+        $hasil = [];
+
+        // Mengambil 7 hari ke depan
+        for ($i = 1; $i <= $jumlahHari; $i++) {
+            $tanggal->add(new DateInterval('P1D')); // Menambahkan 1 hari
+            $hasil[] = $tanggal->format('Y-m-d'); // Menyimpan tanggal dalam format yang diinginkan
+        }
+
+        return $hasil;
+    }
+
+    function updatePayrollPeriode($salary_type)
+    {
+        $getPayrollPeriodeOpen = DB::table('daily_worker_salary_periode as sp')
+            ->join('daily_worker_salary_type as st', 'sp.salary_type', '=', 'st.id')
+            ->select('sp.id', 'sp.to_date', 'st.total_day')
+            ->where('sp.salary_type', $salary_type)
+            ->where('sp.inactive', 0)
+            ->first();
+
+        $tanggalSelanjutnya = $this->nextDatePeriode($getPayrollPeriodeOpen->to_date, $getPayrollPeriodeOpen->total_day);
+
+        // Menampilkan hasil
+        $val = [];
+        foreach ($tanggalSelanjutnya as $tanggal) {
+            array_push($val, $tanggal);
+        }
+
+        // Mengambil indeks pertama
+        $first = $val[0];
+
+        // Mengambil indeks terakhir
+        $last = $val[count($val) - 1];
+
+        DB::table('daily_worker_salary_periode')->where('id', $getPayrollPeriodeOpen->id)->update(
+            [
+                'inactive' => 1,
+                'updated_at' => Carbon::now(),
+                'updated_by' => Auth::user()->id
+            ]
+        );
+
+        DB::table('daily_worker_salary_periode')->insert(
+            [
+                'from_date' => $first,
+                'to_date' => $last,
+                'salary_type' => $salary_type,
+                'inactive' => 0,
+                'created_by' => 1
+            ]
+        );
+    }
+
     public function storePayrollDailyWorker(DailyWorkerRequest $request)
     {
-        $data = $request->only([
-            'from_date',
-            'to_date',
-            'salary_type',
-            'site'
-        ]);
+        $getPayrollPeriodeOpen = DB::table('daily_worker_salary_periode')->where('salary_type', $request->salary_type)->where('inactive', 0)->orderBy('id', 'desc')->first();
 
-        if ($request->from_date > $request->to_date) {
-            return back()->with('errorMessage', 'Tanggal tidak sesuai!');
+        if ($getPayrollPeriodeOpen->to_date >= date('Y-m-d')) {
+            return back()->with('errorMessage', 'Belum memasuki Periode Payroll!');
         }
 
-        $startDate = $request->from_date;
-        $endDate = $request->to_date;
+        $startDate = $getPayrollPeriodeOpen->from_date;
+        $endDate = $getPayrollPeriodeOpen->to_date;
 
-        $periode = $startDate . ' s.d ' . $endDate;
-        $salaryByperiod = DB::table('daily_worker_salary')->where('periode', $periode)->count();
 
-        if ($salaryByperiod > 0) {
-            return back()->with('errorMessage', 'Payroll Periode ini sudah ada!');
-        }
+        $periode = $getPayrollPeriodeOpen->id;
 
         DB::beginTransaction();
         try {
@@ -369,16 +422,16 @@ class EmployeesController extends StislaController
                 'daily_workers.meal_allowance_perday',
                 'daily_workers.personal_loan',
                 'daily_workers.installment_loan',
+                'daily_workers.rapel',
                 'daily_worker_salary_type.type' // Ganti dengan kolom yang ingin diambil dari tabel salary_type
             )
                 ->join('daily_worker_salary_type', 'daily_worker_salary_type.id', '=', 'daily_workers.salary_type')
                 ->whereNotNull('daily_workers.rate')
-                ->where('daily_workers.site', $data['site'])
-                ->where('daily_worker_salary_type.id', $data['salary_type'])
+                ->where('daily_workers.site', $request->site)
+                ->where('daily_worker_salary_type.id', $request->salary_type)
                 ->get();
 
             foreach ($query as $data) {
-                $tmp = [];
 
                 $total_attendance = DB::table('daily_worker_attendance')
                     ->select(
@@ -395,9 +448,8 @@ class EmployeesController extends StislaController
 
                 $count_total_attendance = count($total_attendance);
                 $income = ($data->rate * count($total_attendance));
-                $rapel = 0;
+                $rapel = $data->rapel;
                 $loan = ($sumLoan >= $data->personal_loan) ? 0 : round($data->personal_loan / $data->installment_loan);
-                $actual_paid = 0;
                 $meal_allowance = ($data->meal_allowance_perday * 50000);
 
                 if ($data->status == 'TK/0') {
@@ -425,28 +477,49 @@ class EmployeesController extends StislaController
                 $net_income = ($gross_income - $loan - $tax) + $meal_allowance;
                 $gap = $net_income - $net_income;
 
-                $salary = DB::table('daily_worker_salary')->insertGetId(
-                    [
-                        'periode' => $periode,
-                        'badgenumber' => $data->badgenumber,
-                        'working_days' => $count_total_attendance,
-                        'gross_income' => $income,
-                        'income_arrears' => $rapel,
-                        'loan' => $loan,
-                        'tax' => $tax,
-                        'net_income' => $net_income,
-                        'gap' => $gap,
-                        'created_by' => 1
-                    ]
+                $value =   [
+                    'periode' => $periode,
+                    'badgenumber' => $data->badgenumber,
+                    'working_days' => $count_total_attendance,
+                    'meal_allowance' => $meal_allowance,
+                    'rapel' => $rapel,
+                    'gross_income' => ($income + $rapel + $meal_allowance),
+                    'income_arrears' => $rapel,
+                    'loan' => $loan,
+                    'tax' => $tax,
+                    'net_income' => $net_income,
+                    'gap' => $gap,
+                    'created_by' => 1
+                ];
+
+                $uniqueCondition = [
+                    'periode' => $periode,
+                    'badgenumber' => $data->badgenumber
+                ];
+
+                $salary = DB::table('daily_worker_salary')->updateOrInsert(
+                    $uniqueCondition,
+                    $value
                 );
 
+                $entry = DB::table('daily_worker_salary')->where($uniqueCondition)->first();
+
                 if ($loan > 0) {
-                    DB::table('daily_worker_salary_loan')->insert(
-                        [
-                            'badgenumber' => $data->badgenumber,
-                            'amount' => $loan,
-                            'salary_id' => $salary
-                        ]
+
+                    $loan_value =   [
+                        'badgenumber' => $data->badgenumber,
+                        'amount' => $loan,
+                        'salary_id' => $entry->id,
+                        'updated_at' => Carbon::now()
+                    ];
+
+                    $loanUniqueCondition = [
+                        'badgenumber' => $data->badgenumber,
+                        'salary_id' => $entry->id
+                    ];
+                    DB::table('daily_worker_salary_loan')->updateOrInsert(
+                        $loanUniqueCondition,
+                        $loan_value
                     );
                 }
 
@@ -458,9 +531,11 @@ class EmployeesController extends StislaController
                 //     );
             }
 
-            DB::commit();
-            // logCreate("Grup Menu", $result);
+            if ($request->locked) {
+                $this->updatePayrollPeriode($request->salary_type);
+            }
 
+            DB::commit();
             $successMessage = successMessageCreate("Calculate Payroll Daily Worker");
 
             return redirect()->route('employees.daily-worker.listpayroll')->with('successMessage', $successMessage);

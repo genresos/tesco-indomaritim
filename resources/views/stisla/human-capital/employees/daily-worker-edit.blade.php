@@ -44,34 +44,34 @@
               </div>
 
               <div class="col-md-6">
-                  @include('stisla.includes.forms.inputs.input', [
-                      'id' => 'nik',
-                      'name' => 'nik',
-                      'label' => __('NIK'),
-                      'type' => 'number', // Change type to 'number'
-                      'value' => $data->nik,
-                      'required' => true,
-                      'icon' => 'fas fa-credit-card',
-                      'attributes' => [
-                          'min' => '0', // Optional: to prevent negative numbers
-                          'step' => '1', // Optional: to ensure whole numbers only
-                      ],
-                  ])
+                @include('stisla.includes.forms.inputs.input', [
+                'id' => 'nik',
+                'name' => 'nik',
+                'label' => __('NIK'),
+                'type' => 'number', // Change type to 'number'
+                'value' => $data->nik,
+                'required' => true,
+                'icon' => 'fas fa-credit-card',
+                'attributes' => [
+                'min' => '0', // Optional: to prevent negative numbers
+                'step' => '1', // Optional: to ensure whole numbers only
+                ],
+                ])
               </div>
 
               <div class="col-md-6">
-                                  @include('stisla.includes.forms.selects.select', [
-                                      'id' => 'site',
-                                      'name' => 'site',
-                                      'label' => __('Pilih Site'),
-                                      'options' => [
-                                          'TLD' => 'TLD',
-                                          'TM5' => 'TM5',
-                                          'TM7' => 'TM7',
-                                      ],
-                                      'selected' => $data->site,
-                                      'with_all' => true,
-                                  ])
+                @include('stisla.includes.forms.selects.select', [
+                'id' => 'site',
+                'name' => 'site',
+                'label' => __('Pilih Site'),
+                'options' => [
+                'TLD' => 'TLD',
+                'TM5' => 'TM5',
+                'TM7' => 'TM7',
+                ],
+                'selected' => $data->site,
+                'with_all' => true,
+                ])
               </div>
 
 
@@ -131,7 +131,7 @@
                 'type' => 'number',
                 'value' => $data->rate,
                 'required' => true,
-                'icon' => 'fas fa-money-bill-wave',
+                'icon' => 'fas fa-dollar',
                 'step' => 'any', // Allow decimal values
                 ])
               </div>
@@ -157,10 +157,11 @@
                 'type' => 'number',
                 'value' => $data->personal_loan,
                 'required' => false,
-                'icon' => 'fas fa-money-bill-wave',
+                'icon' => 'fas fa-dollar',
                 'step' => 'any', // Allow decimal values
                 ])
               </div>
+
               <div class="col-md-6">
                 @include('stisla.includes.forms.inputs.input', [
                 'id' => 'installment_loan',
@@ -169,7 +170,20 @@
                 'type' => 'number',
                 'value' => $data->installment_loan,
                 'required' => false,
-                'icon' => 'fas fa-money-bill-wave',
+                'icon' => 'fas fa-dollar',
+                'step' => 'any', // Allow decimal values
+                ])
+              </div>
+
+              <div class="col-md-6">
+                @include('stisla.includes.forms.inputs.input', [
+                'id' => 'rapel',
+                'name' => 'rapel',
+                'label' => __('Rapel'),
+                'type' => 'number',
+                'value' => $data->rapel,
+                'required' => false,
+                'icon' => 'fas fa-dollar',
                 'step' => 'any', // Allow decimal values
                 ])
               </div>

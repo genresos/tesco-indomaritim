@@ -22,12 +22,12 @@ $canAction = $canUpdate || $canDelete;
             <th>{{ __('Status') }}</th>
             <th>{{ __('Work Days') }}</th>
             <th>{{ __('Rapel') }}</th>
+            <th>{{ __('Meal Allowance') }}</th>
+            <th>{{ __('Gaji Pokok') }}</th>
             <th>{{ __('Bruto') }}</th>
             <th>{{ __('Loan') }}</th>
             <th>{{ __('Tax') }}</th>
             <th>{{ __('Net Income') }}</th>
-            <th>{{ __('Actual Paid') }}</th>
-            <th>{{ __('GAP') }}</th>
             <th>{{ __('Bank') }}</th>
             <th>{{ __('Bank No.') }}</th>
             <th>{{ __('Account Bank Name') }}</th>
@@ -44,13 +44,13 @@ $canAction = $canUpdate || $canDelete;
             <td>{{ $item->department }}</td>
             <td>{{ $item->status }}</td>
             <td>{{ $item->working_days }}</td>
-            <td>0</td>
+            <td>Rp {{ number_format($item->rapel, 0, ',', '.') }}</td>
+            <td>Rp {{ number_format($item->meal_allowance, 0, ',', '.') }}</td>
+            <td>Rp {{ number_format(($item->working_days * $item->rate), 0, ',', '.') }}</td>
             <td>Rp {{ number_format($item->gross_income, 0, ',', '.') }}</td>
             <td>Rp {{ number_format($item->loan, 0, ',', '.') }}</td>
             <td>Rp {{ number_format($item->tax, 0, ',', '.') }}</td>
             <td>Rp {{ number_format($item->net_income, 0, ',', '.') }}</td>
-            <td>0</td>
-            <td>0</td>
             <td>{{ $item->bank_name }}</td>
             <td>{{ $item->bank_account_no }}</td>
             <td>{{ $item->bank_account_name }}</td>

@@ -21,7 +21,12 @@ class DailyWorker extends Model
         'site',
         'bank_name',
         'bank_account_no',
-        'bank_account_name'
+        'bank_account_name',
+        'rapel',
+        'nik',
+        'personal_loan',
+        'installment_loan',
+        'meal_allowance_perday'
     ];
 
     public $timestamps = true;
