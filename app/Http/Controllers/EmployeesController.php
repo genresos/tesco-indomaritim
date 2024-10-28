@@ -394,6 +394,9 @@ class EmployeesController extends StislaController
     public function storePayrollDailyWorker(DailyWorkerRequest $request)
     {
         $getPayrollPeriodeOpen = DB::table('daily_worker_salary_periode')->where('salary_type', $request->salary_type)->where('inactive', 0)->orderBy('id', 'desc')->first();
+        if ($getPayrollPeriodeOpen->to_date >= date('Y-m-d')) {
+            return back()->with('errorMessage', 'Belum memasuki Periode Payroll!');
+        }
 
         $startDate = $getPayrollPeriodeOpen->from_date;
         $endDate = $getPayrollPeriodeOpen->to_date;
