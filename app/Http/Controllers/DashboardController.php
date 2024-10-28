@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Models\DailyWorker;
 
 class DashboardController extends StislaController
 {
@@ -161,7 +162,7 @@ class DashboardController extends StislaController
         if ($user->can('Daily Worker'))
             $widgets[] = (object)[
                 'title' => 'Daily Worker',
-                'count' => '39',
+                'count' => DailyWorker::count(),
                 'bg'    => 'info',
                 'icon'  => 'users',
                 'route' => route('employees.daily-worker.show'),

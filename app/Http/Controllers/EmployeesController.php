@@ -395,10 +395,6 @@ class EmployeesController extends StislaController
     {
         $getPayrollPeriodeOpen = DB::table('daily_worker_salary_periode')->where('salary_type', $request->salary_type)->where('inactive', 0)->orderBy('id', 'desc')->first();
 
-        if ($getPayrollPeriodeOpen->to_date >= date('Y-m-d')) {
-            return back()->with('errorMessage', 'Belum memasuki Periode Payroll!');
-        }
-
         $startDate = $getPayrollPeriodeOpen->from_date;
         $endDate = $getPayrollPeriodeOpen->to_date;
 
@@ -427,7 +423,7 @@ class EmployeesController extends StislaController
             )
                 ->join('daily_worker_salary_type', 'daily_worker_salary_type.id', '=', 'daily_workers.salary_type')
                 ->whereNotNull('daily_workers.rate')
-                ->where('daily_workers.site', $request->site)
+                ->whereIn('daily_workers.site', $request->site)
                 ->where('daily_worker_salary_type.id', $request->salary_type)
                 ->get();
 
@@ -454,13 +450,13 @@ class EmployeesController extends StislaController
 
                 if ($data->status == 'TK/0') {
                     $totalpendapatansetahun = 54000000;
-                } elseif ($data->status == 'K/0') {
-                    $totalpendapatansetahun = 54000000;
-                } elseif ($data->status == 'K/1') {
+                } elseif ($data->status == 'K0') {
+                    $totalpendapatansetahun = 58500000;
+                } elseif ($data->status == 'K1') {
                     $totalpendapatansetahun = 63000000;
-                } elseif ($data->status == 'K/2') {
+                } elseif ($data->status == 'K2') {
                     $totalpendapatansetahun = 67500000;
-                } elseif ($data->status == 'K/3') {
+                } elseif ($data->status == 'K3') {
                     $totalpendapatansetahun = 72000000;
                 }
 
@@ -497,10 +493,12 @@ class EmployeesController extends StislaController
                     'badgenumber' => $data->badgenumber
                 ];
 
-                $salary = DB::table('daily_worker_salary')->updateOrInsert(
-                    $uniqueCondition,
-                    $value
-                );
+                if ($net_income > 0) {
+                    DB::table('daily_worker_salary')->updateOrInsert(
+                        $uniqueCondition,
+                        $value
+                    );
+                }
 
                 $entry = DB::table('daily_worker_salary')->where($uniqueCondition)->first();
 
@@ -523,6 +521,24 @@ class EmployeesController extends StislaController
                     );
                 }
 
+                if ($request->locked) {
+
+                    DB::table('daily_worker')->where('badgenumber', $data->badgenumber)->update(
+                        [
+                            'rapel' => 0,
+                            'meal_allowance_perday' => 0
+                        ]
+                    );
+
+                    if ($sumLoan >= $data->personal_loan)
+                        DB::table('daily_worker')->where('badgenumber', $data->badgenumber)->update(
+                            [
+                                'personal_loan' => 0,
+                                'installment_loan' => 0
+                            ]
+                        );
+                }
+
                 // DB::table('daily_worker_salary_loan')
                 //     ->where('badgenumber', $data->badgenumber)->update(
                 //         [
@@ -532,11 +548,14 @@ class EmployeesController extends StislaController
             }
 
             if ($request->locked) {
+
                 $this->updatePayrollPeriode($request->salary_type);
             }
 
             DB::commit();
             $successMessage = successMessageCreate("Calculate Payroll Daily Worker");
+
+            // sleep(5);
 
             return redirect()->route('employees.daily-worker.listpayroll')->with('successMessage', $successMessage);
         } catch (Exception $exception) {

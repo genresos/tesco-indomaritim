@@ -50,14 +50,21 @@
 
               <div class="col-md-6 mx-auto">
                 <div class="form-group">
-                  <label for="site">{{ __('Site Work') }}</label>
-                  <select id="site" name="site" class="form-control" required>
-                    <option value="" disabled selected>{{ __('Select Site Work') }}</option>
-                    <option value="TLD">Tulodong</option>
-                    <option value="TM5">TM 5 Bekasi</option>
-                  </select>
+                  <label>{{ __('Site Work') }}</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="site[]" value="TLD" id="siteTLD">
+                    <label class="form-check-label" for="siteTLD">Tulodong</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="site[]" value="TM5" id="siteTM5">
+                    <label class="form-check-label" for="siteTM5">TM 5 Bekasi</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="site[]" value="TM7" id="siteTM7">
+                    <label class="form-check-label" for="siteTM7">TM 7 Indramayu</label>
+                  </div>
                   <div class="invalid-feedback">
-                    Please select a site work.
+                    Please select at least one site work.
                   </div>
                 </div>
               </div>
@@ -65,7 +72,7 @@
               <div class="col-md-12 text-center">
                 <div class="form-group form-check">
                   <input type="checkbox" class="form-check-input" id="locked" name="locked">
-                  <label class="form-check-label" for="locked">{{ __('Locked this Period') }}</label>
+                  <label class="form-check-label" for="locked">{{ __('Lock Current Period ?') }}</label>
                 </div>
               </div>
             </div>
