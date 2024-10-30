@@ -1,5 +1,0 @@
-@extends('stisla.layouts.app-datatable')
-
-@section('table')
-  @include('stisla.user-management.roles.table')
-@endsection
