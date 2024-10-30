@@ -219,4 +219,6 @@ Route::prefix('employees')->as('employees.')->group(function () {
     Route::get('daily-worker/attendance/upload', [EmployeesController::class, 'FormUploadAttendance'])->name('daily-worker.attendance-upload');
     Route::post('daily-worker/attendance/upload', [EmployeesController::class, 'StoreUploadAttendance'])->name('daily-worker.attendance-upload-store');
     Route::get('daily-worker/export/{fromDate?}/{toDate?}', [EmployeesController::class, 'ExportAttendanceDailyWorker'])->name('daily-worker.attendance-export');
+
+    Route::get('daily-worker/payroll/payslip/{id}', [EmployeesController::class, 'downloadPayslip'])->name('daily-worker.payslip');
 });

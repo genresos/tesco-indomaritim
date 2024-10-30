@@ -8,14 +8,15 @@ use Imagick;
 use ImagickPixel;
 use Intervention\Image\EncodedImage;
 use Intervention\Image\Encoders\WebpEncoder as GenericWebpEncoder;
+use Intervention\Image\Interfaces\EncodedImageInterface;
 use Intervention\Image\Interfaces\ImageInterface;
 use Intervention\Image\Interfaces\SpecializedInterface;
 
 class WebpEncoder extends GenericWebpEncoder implements SpecializedInterface
 {
-    public function encode(ImageInterface $image): EncodedImage
+    public function encode(ImageInterface $image): EncodedImageInterface
     {
-        $format = 'webp';
+        $format = 'WEBP';
         $compression = Imagick::COMPRESSION_ZIP;
 
         $imagick = $image->core()->native();

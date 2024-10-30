@@ -4,6 +4,19 @@
 
 ### UNRELEASED
 
+### v11.6.0 (2024-08-31)
+
+- feat: add macro in editor builder #225
+
+### v11.5.1 (2024-08-31)
+
+- fix: unauthorized columns being displayed by builder #223
+- fix: #222
+
+### v11.5.0 (2024-08-31)
+
+- feat: enable macro on Button builder #224
+
 ### v11.4.0 (2024-05-31)
 
 - feat: add className method to Editor Field #220

@@ -31,8 +31,7 @@ $canAction = $canUpdate || $canDelete;
             <th>{{ __('Bank') }}</th>
             <th>{{ __('Bank No.') }}</th>
             <th>{{ __('Account Bank Name') }}</th>
-
-
+            <th>{{ __('Payslip') }}</th> <!-- New Action Header -->
 
         </tr>
     </thead>
@@ -54,7 +53,10 @@ $canAction = $canUpdate || $canDelete;
             <td>{{ $item->bank_name }}</td>
             <td>{{ $item->bank_account_no }}</td>
             <td>{{ $item->bank_account_name }}</td>
+            <td>
+                @include('stisla.includes.forms.buttons.btn-download', ['link' => route('employees.daily-worker.payslip', [$item->id])])
 
+            </td>
 
         </tr>
         @endforeach

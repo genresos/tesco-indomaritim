@@ -15,6 +15,9 @@ use DatePeriod;
 use DateTime;
 use DateInterval;
 use Auth;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 
 class EmployeesController extends StislaController
 {
@@ -565,5 +568,30 @@ class EmployeesController extends StislaController
             DB::rollBack();
             return back()->with('errorMessage', $exception->getMessage());
         }
+    }
+
+    public function downloadPayslip($id)
+    {
+        $data = $this->employeesRepository->getPayrollListDailyWorker($id);
+        $document_name = $data[0]->name;
+        $htmlContent = view('stisla.human-capital.employees.daily-worker-payslip', ['data' => $data])->render();
+
+        // Initialize Dompdf
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $options->set('isRemoteEnabled', true); // Enable remote file access
+        $dompdf = new Dompdf($options);
+
+        // Load HTML content
+        $dompdf->loadHtml($htmlContent);
+
+        // Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the PDF
+        $dompdf->render();
+
+        // Stream the PDF in the browser
+        return $dompdf->stream($document_name . '.pdf', ['Attachment' => true]);
     }
 }

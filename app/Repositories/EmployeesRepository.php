@@ -130,12 +130,38 @@ class EmployeesRepository extends Repository
         return $results;
     }
 
-    public function getPayrollListDailyWorker()
+    public function getPayrollListDailyWorker($id = 0)
     {
         $results = DB::table('daily_worker_salary as s')
             ->join('daily_worker as u', 's.badgenumber', '=', 'u.badgenumber')
-            ->select('u.*', 's.*')
-            ->get();
+            ->join('daily_worker_salary_periode as p', 's.periode', '=', 'p.id')
+            ->select(
+                DB::raw("CONCAT(DATE_FORMAT(p.from_date, '%d/%m/%y'), ' - ', DATE_FORMAT(p.to_date, '%d/%m/%y')) AS periode"),
+                's.id',
+                'u.name',
+                'u.department',
+                'u.site',
+                'u.status',
+                's.working_days',
+                'u.rapel',
+                's.meal_allowance',
+                'u.rate',
+                's.gross_income',
+                's.loan',
+                's.tax',
+                's.net_income',
+                'u.bank_name',
+                'u.bank_account_no',
+                'u.bank_account_name'
+            );
+
+        // Add the conditional where clause
+        if ($id != 0) {
+            $results->where('s.id', $id);
+        }
+
+        $results = $results->get();
+
 
         return $results;
     }

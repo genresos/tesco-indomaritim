@@ -254,7 +254,6 @@ interface ImageInterface extends IteratorAggregate, Countable
      * Return color that is mixed with transparent areas when converting to a format which
      * does not support transparency.
      *
-     * @deprecated Use configuration options of image manager instead
      * @throws RuntimeException
      * @return ColorInterface
      */
@@ -264,7 +263,6 @@ interface ImageInterface extends IteratorAggregate, Countable
      * Set blending color will have no effect unless image is converted into a format
      * which does not support transparency.
      *
-     * @deprecated Use configuration options of image manager instead
      * @param mixed $color
      * @throws RuntimeException
      * @return ImageInterface
@@ -672,10 +670,10 @@ interface ImageInterface extends IteratorAggregate, Countable
     /**
      * Fill image with given color
      *
-     * If coordinates are transferred in the form of X and Y values, the function
-     * is executed as a flood fill. This means that the color at the specified
-     * position is taken as a reference and all adjacent pixels are also filled
-     * with the same color.
+     * If an optional position is specified for the filling process ln the form
+     * of x and y coordinates, the process is executed as flood fill. This means
+     * that the color at the specified position is taken as a reference and all
+     * adjacent pixels are also filled with the filling color.
      *
      * If no coordinates are specified, the entire image area is filled.
      *
