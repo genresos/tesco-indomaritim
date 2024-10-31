@@ -6,9 +6,16 @@ $canAction = $canUpdate || $canDelete;
 @endphp
 
 <div>
-    <a href="{{ route('employees.daily-worker.attendance') }}" class="btn btn-success">Show Attendance</a>
-    <a href="{{ route('employees.daily-worker.listpayroll') }}" class="btn btn-primary">Payroll</a>
-    <a href="{{ route('employees.daily-worker.calculate') }}" class="btn btn-warning">Calculate Payroll</a>
+    <div class="d-flex justify-content-between mb-3">
+        <div>
+            <a href="{{ route('employees.daily-worker.attendance') }}" class="btn btn-success">Show Attendance</a>
+            <a href="{{ route('employees.daily-worker.listpayroll') }}" class="btn btn-primary">Payroll</a>
+            <a href="{{ route('employees.daily-worker.calculate') }}" class="btn btn-warning">Calculate Payroll</a>
+        </div>
+        <div>
+            <a href="{{ route('employees.daily-worker.create') }}" class="btn btn-info">Add New</a> <!-- Tombol Add -->
+        </div>
+    </div>
 
 </div>
 

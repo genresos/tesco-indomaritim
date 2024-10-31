@@ -260,6 +260,57 @@ class EmployeesController extends StislaController
         return Excel::download(new DailyWorkerAttendanceExport($finalResult), 'DailyWorkerAttendanceExport.xlsx');
     }
 
+    public function addWorker()
+    {
+
+        return view('stisla.human-capital.employees.daily-worker-create');
+    }
+
+    public function createWorker(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'badgenumber' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'nik' => 'required|string|max:16', // Atau 'required|integer|max:16' jika diharapkan sebagai angka
+            'site' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+            'bank_name' => 'required|string|max:255',
+            'bank_account_no' => 'required|string|max:255',
+            'bank_account_name' => 'required|string|max:255',
+            'rate' => 'required|numeric|min:0',
+            'personal_loan' => 'nullable|numeric|min:0',
+            'installment_loan' => 'nullable|numeric|min:0',
+            'meal_allowance_perday' => 'nullable|numeric|min:0',
+            'rapel' => 'nullable|numeric|min:0',
+            'status' => 'required|string|max:255',
+            'salary_type' => 'required|in:1,2,3',
+        ]);
+
+        // Buat pekerja baru
+        $worker = new DailyWorker;
+        $worker->badgenumber = $request->badgenumber;
+        $worker->name = $request->name;
+        $worker->nik = $request->nik;
+        $worker->site = $request->site;
+        $worker->department = $request->department;
+        $worker->bank_name = $request->bank_name;
+        $worker->bank_account_no = $request->bank_account_no;
+        $worker->bank_account_name = $request->bank_account_name;
+        $worker->rate = $request->rate;
+        $worker->meal_allowance_perday = $request->meal_allowance_perday;
+        $worker->personal_loan = $request->personal_loan;
+        $worker->installment_loan = $request->installment_loan;
+        $worker->rapel = $request->rapel;
+        $worker->status = $request->status;
+        $worker->salary_type = $request->salary_type;
+
+        // Simpan perubahan ke database
+        $worker->save();
+
+        // Redirect ke halaman dengan pesan sukses
+        return redirect()->route('employees.daily-worker.index')->with('successMessage', 'Daily worker added successfully.');
+    }
 
     /**
      * showing edit worker page
