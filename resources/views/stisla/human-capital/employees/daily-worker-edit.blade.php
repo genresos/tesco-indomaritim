@@ -44,6 +44,24 @@
               </div>
 
               <div class="col-md-6">
+                @include('stisla.includes.forms.selects.select', [
+                'id' => 'status',
+                'name' => 'status',
+                'label' => __('Status'),
+                'options' => [
+                'TK/0' => 'TK/0',
+                'K0' => 'K0',
+                'K1' => 'K1',
+                'K2' => 'K2',
+                'K3' => 'K3',
+                ],
+                'selected' => $data->status,
+                'required' => true,
+                'icon' => 'fas fa-comment',
+                ])
+              </div>
+
+              <div class="col-md-6">
                 @include('stisla.includes.forms.inputs.input', [
                 'id' => 'nik',
                 'name' => 'nik',

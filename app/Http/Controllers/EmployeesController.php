@@ -295,6 +295,7 @@ class EmployeesController extends StislaController
             'installment_loan' => 'required|numeric|min:0',
             'meal_allowance_perday' => 'required|numeric|min:0',
             'rapel' => 'required|numeric|min:0',
+            'status' => 'required|string|max:255',
             'salary_type' => 'required|in:1,2,3', // Validasi untuk Payroll Type
         ]);
 
@@ -320,6 +321,7 @@ class EmployeesController extends StislaController
         $worker->personal_loan = $request->personal_loan;
         $worker->installment_loan = $request->installment_loan;
         $worker->rapel = $request->rapel;
+        $worker->status = $request->status;
         $worker->salary_type = $request->salary_type;
 
         // Simpan perubahan ke database
