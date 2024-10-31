@@ -27,7 +27,7 @@
                 'value' => $data->badgenumber,
                 'required' => true,
                 'icon' => 'fas fa-id-card',
-                'attributes' => ['readonly' => 'readonly'] // Menambahkan atribut readonly
+                'attributes' => ['readonly' => 'readonly']
                 ])
               </div>
 
@@ -66,13 +66,13 @@
                 'id' => 'nik',
                 'name' => 'nik',
                 'label' => __('NIK'),
-                'type' => 'number', // Change type to 'number'
+                'type' => 'number',
                 'value' => $data->nik,
                 'required' => true,
                 'icon' => 'fas fa-credit-card',
                 'attributes' => [
-                'min' => '0', // Optional: to prevent negative numbers
-                'step' => '1', // Optional: to ensure whole numbers only
+                'min' => '0',
+                'step' => '1',
                 ],
                 ])
               </div>
@@ -91,7 +91,6 @@
                 'with_all' => true,
                 ])
               </div>
-
 
               <div class="col-md-6">
                 @include('stisla.includes.forms.inputs.input', [
@@ -150,7 +149,7 @@
                 'value' => $data->rate,
                 'required' => true,
                 'icon' => 'fas fa-dollar',
-                'step' => 'any', // Allow decimal values
+                'step' => 'any',
                 ])
               </div>
 
@@ -163,7 +162,7 @@
                 'value' => $data->meal_allowance_perday,
                 'required' => false,
                 'icon' => 'fas fa-money-bill-wave',
-                'step' => 'any', // Allow decimal values
+                'step' => 'any',
                 ])
               </div>
 
@@ -176,7 +175,7 @@
                 'value' => $data->personal_loan,
                 'required' => false,
                 'icon' => 'fas fa-dollar',
-                'step' => 'any', // Allow decimal values
+                'step' => 'any',
                 ])
               </div>
 
@@ -189,7 +188,7 @@
                 'value' => $data->installment_loan,
                 'required' => false,
                 'icon' => 'fas fa-dollar',
-                'step' => 'any', // Allow decimal values
+                'step' => 'any',
                 ])
               </div>
 
@@ -202,7 +201,7 @@
                 'value' => $data->rapel,
                 'required' => false,
                 'icon' => 'fas fa-dollar',
-                'step' => 'any', // Allow decimal values
+                'step' => 'any',
                 ])
               </div>
 
@@ -223,15 +222,26 @@
 
               <div class="col-md-12" id="formAreaButton">
                 <br>
-                @include('stisla.includes.forms.buttons.btn-save')
-                @include('stisla.includes.forms.buttons.btn-reset')
-              </div>
-            </div>
+                <div class="d-flex justify-content-between">
+                  @include('stisla.includes.forms.buttons.btn-save')
           </form>
+
+          <div class="ml-auto">
+            <!-- Delete Button Form -->
+            <form action="{{ route('employees.daily-worker.destroy', $data->badgenumber) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this worker?');">
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
+</div>
+</div>
 </div>
 @endsection
 

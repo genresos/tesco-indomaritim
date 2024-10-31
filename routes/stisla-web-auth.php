@@ -212,6 +212,8 @@ Route::prefix('employees')->as('employees.')->group(function () {
     Route::get('daily-worker/edit/{pin}', [EmployeesController::class, 'editWorker'])->name('daily-worker.edit');
     Route::get('daily-worker/create', [EmployeesController::class, 'addWorker'])->name('daily-worker.create');
     Route::post('daily-worker/store', [EmployeesController::class, 'createWorker'])->name('daily-worker.storenew');
+    Route::delete('daily-worker/{pin}', [EmployeesController::class, 'deleteWorker'])->name('daily-worker.destroy');
+
     Route::put('daily-worker/update/{pin}', [EmployeesController::class, 'updateWorker'])->name('daily-worker.update');
 
     Route::post('daily-worker/payroll', [EmployeesController::class, 'storePayrollDailyWorker'])->name('daily-worker.store');

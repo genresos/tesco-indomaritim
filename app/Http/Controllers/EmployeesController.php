@@ -266,6 +266,20 @@ class EmployeesController extends StislaController
         return view('stisla.human-capital.employees.daily-worker-create');
     }
 
+    public function deleteWorker($id)
+    {
+
+        // Logic to find the employee by badgenumber and delete it
+        $employee = DailyWorker::where('badgenumber', $id)->first();
+
+        if ($employee) {
+            $employee->delete();
+            return redirect()->route('employees.daily-worker.index')->with('successMessage', 'Worker deleted successfully.');
+        }
+
+        return redirect()->route('employees.daily-worker.index')->with('error', 'Worker not found.');
+    }
+
     public function createWorker(Request $request)
     {
         // Validasi input
