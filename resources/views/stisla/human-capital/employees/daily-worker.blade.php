@@ -14,10 +14,13 @@ $canAction = $canUpdate || $canDelete;
         </div>
         <div>
             <a href="{{ route('employees.daily-worker.create') }}" class="btn btn-info">Add New</a> <!-- Tombol Add -->
+            <a href="{{ route('employees.daily-worker.import') }}" class="btn btn-secondary">
+                <i class="fas fa-file-import"></i> Import Worker
+            </a> <!-- Import Worker button with icon -->
         </div>
     </div>
-
 </div>
+
 
 
 </br>

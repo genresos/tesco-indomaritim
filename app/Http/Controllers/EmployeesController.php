@@ -295,6 +295,102 @@ class EmployeesController extends StislaController
         return redirect()->route('employees.daily-worker.index')->with('error', 'Worker not found.');
     }
 
+    /**
+     * showing add new menu page
+     *
+     * @return Response
+     */
+    public function FormImportCreateWorker()
+    {
+        $title         = __('Upload Worker');
+        $fullTitle     = __('Upload Daily Worker');
+        $defaultData   = $this->getDefaultDataCreate($title, 'employees.daily-worker');
+
+        return view('stisla.human-capital.employees.daily-worker-form-import', array_merge($defaultData, [
+            'fullTitle'     => $fullTitle,
+        ]));
+    }
+
+    public function importCreateWorker(Request $request)
+    {
+        // Validasi file
+        if (!$request->hasFile('worker') || !$request->file('worker')->isValid()) {
+            return redirect()->back()->with('error', 'File harus diunggah dan valid!');
+        }
+
+        $file = $request->file('worker');
+
+        // Cek ekstensi file
+        if ($file->getClientOriginalExtension() != 'xlsx') {
+            return redirect()->route('employees.daily-worker.attendance-upload')->with('error', 'Format file tidak sesuai! Harus dalam format XLSX.');
+        }
+
+        DB::beginTransaction();
+
+        // Mengambil data dari file Excel
+        try {
+            $data = Excel::toArray([], $file);
+
+            // Pastikan data tidak kosong
+            if (empty($data)) {
+                return redirect()->back()->with('error', 'Data tidak ditemukan dalam file.');
+            }
+
+            // Ambil sheet pertama
+            $sheetData = $data[0];
+
+            // Mengabaikan baris pertama (header) dan melakukan looping
+            for ($i = 1; $i < count($sheetData); $i++) {
+                $row = $sheetData[$i];
+
+                $id = $row[0];
+                $nik = $row[1];
+                $name = $row[2];
+                $status = $row[3];
+                $site = $row[4];
+                $department = $row[5];
+                $bank_name = $row[6];
+                $bank_no = $row[7];
+                $bank_account_name = $row[8];
+                $daily_rate = $row[9];
+                $meal_allowance = $row[10];
+                $personal_loan = $row[11];
+                $installment_loan = $row[12];
+                $rapel = $row[13];
+                $payroll_type = $row[14];
+
+
+                // Buat pekerja baru
+                $worker = new DailyWorker;
+                $worker->badgenumber = $id;
+                $worker->name = $name;
+                $worker->nik = $nik;
+                $worker->site = $site;
+                $worker->department = $department;
+                $worker->bank_name = $bank_name;
+                $worker->bank_account_no = $bank_no;
+                $worker->bank_account_name = $bank_account_name;
+                $worker->rate = $daily_rate;
+                $worker->meal_allowance_perday = $meal_allowance;
+                $worker->personal_loan = $personal_loan;
+                $worker->installment_loan = $installment_loan;
+                $worker->rapel = $rapel;
+                $worker->status = $status;
+                $worker->salary_type = $payroll_type;
+
+                // Simpan perubahan ke database
+                $worker->save();
+
+                DB::commit();
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memproses file: ' . $e->getMessage());
+        }
+
+        return redirect()->route('employees.daily-worker.index')->with('successMessage', 'Daily worker import successfully.');
+    }
+
     public function createWorker(Request $request)
     {
         // Validasi input
