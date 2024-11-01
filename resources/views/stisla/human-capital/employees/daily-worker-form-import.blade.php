@@ -25,7 +25,7 @@
         <div class="card-header">
           <h4><i class="{{ $moduleIcon }}"></i> {{ $fullTitle }}</h4>
           <div class="card-header-action">
-            <a href="http://localhost/assets/template/templateimportworker.xlsx" class="btn btn-primary">
+            <a href="http://192.168.99.230/assets/template/templateimportworker.xlsx" class="btn btn-primary">
               <i class="fas fa-download"></i> {{ __('Download Template') }}
             </a>
           </div>
