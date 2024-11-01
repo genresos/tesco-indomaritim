@@ -123,47 +123,62 @@ class EmployeesController extends StislaController
         }
 
         $file = $request->file('attendance');
-        if ($file->getClientOriginalExtension() != 'csv') {
+        if ($file->getClientOriginalExtension() != 'dat') {
             return redirect()->route('employees.daily-worker.attendance-upload')->with('error', 'Format file tidak sesuai! Harus dalam format CSV.');
         }
 
-        $path = $file->getRealPath();
+        DB::beginTransaction();
+        try {
 
-        if (($handle = fopen($file->getRealPath(), 'r')) !== false) {
-            // Skip the first row
-            fgetcsv($handle);
+            if ($file) {
 
-            DB::beginTransaction();
-            try {
+                $response = [];
 
-                // Read and process the remaining rows
-                while (($data = fgetcsv($handle)) !== false) {
-                    DB::table('daily_worker_attendance')->updateOrInsert(
-                        [
-                            'badgenumber' => $data[0],
-                            'checktime' => $data[1]
-                        ],
-                        [
-                            'badgenumber' => $data[0],
-                            'checktime' => $data[1],
-                            'created_at' => Carbon::now(),
-                            'updated_at' => Carbon::now()
-                        ]
-                    );
+                $handle = fopen($file, 'r');
+                if ($handle) {
+                    while (($line = fgets($handle)) !== false) {
+                        $data = explode(' ', trim($line));
+                        $stringawal = preg_replace('/\s+/', '', $data[0]);
+                        $pin = substr($stringawal, 0, -10);
+                        $date = substr($stringawal, -10);
+
+                        $hourAndMinute = $date . ' ' . substr(preg_replace('/\s+/', '', $data[1]), 0, 5) . ':00';
+                        $tmp = [];
+                        $tmp['pin'] = $pin;
+                        $tmp['time'] = $hourAndMinute;
+
+                        array_push($response, $tmp);
+                    }
+
+                    fclose($handle);
                 }
-                fclose($handle);
-
-                // Commit Transaction
-                DB::commit();
-
-                // If everything is fine, proceed with the upload logic
-                $successMessage = successMessageCreate("Attendance");
-
-                return redirect()->route('employees.daily-worker.attendance-upload')->with('successMessage', $successMessage);
-            } catch (Exception $e) {
-                // Rollback Transaction
-                DB::rollback();
             }
+
+            foreach ($response as $item) {
+                // echo $item['time'] . "\n";
+                DB::table('daily_worker_attendance')->updateOrInsert(
+                    [
+                        'badgenumber' => $item['pin'],
+                        'checktime' => $item['time']
+                    ],
+                    [
+                        'badgenumber' => $item['pin'],
+                        'checktime' => $item['time'],
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now()
+                    ]
+                );
+            }
+            // Commit Transaction
+            DB::commit();
+
+            // If everything is fine, proceed with the upload logic
+            $successMessage = successMessageCreate("Attendance");
+
+            return redirect()->route('employees.daily-worker.attendance-upload')->with('successMessage', $successMessage);
+        } catch (Exception $e) {
+            // Rollback Transaction
+            DB::rollback();
         }
     }
 
