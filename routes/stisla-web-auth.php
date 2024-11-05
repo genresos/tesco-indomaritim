@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\FingerMachineController;
 use App\Http\Controllers\EmployeesController;
-
+use App\Http\Controllers\CanteenController;
 
 
 
@@ -227,4 +227,10 @@ Route::prefix('employees')->as('employees.')->group(function () {
     Route::get('daily-worker/export/{fromDate?}/{toDate?}', [EmployeesController::class, 'ExportAttendanceDailyWorker'])->name('daily-worker.attendance-export');
 
     Route::get('daily-worker/payroll/payslip/{id}', [EmployeesController::class, 'downloadPayslip'])->name('daily-worker.payslip');
+});
+
+Route::prefix('canteen')->as('canteen.')->group(function () {
+
+    Route::get('/', [CanteenController::class, 'index'])->name('index');
+    Route::get('/fetch', [CanteenController::class, 'fetchData'])->name('fetchData');
 });

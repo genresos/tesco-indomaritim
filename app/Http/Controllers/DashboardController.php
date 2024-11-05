@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\ActivityLog;
 use App\Models\CrudExample;
 use App\Models\LogRequest;
@@ -17,6 +18,7 @@ use Illuminate\Http\Response;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\DailyWorker;
+use App\Models\Canteen;
 
 class DashboardController extends StislaController
 {
@@ -167,6 +169,16 @@ class DashboardController extends StislaController
                 'icon'  => 'users',
                 'route' => route('employees.daily-worker.show'),
                 'bg_color' => 'blue'
+            ];
+
+        if ($user->can('Canteen Transaction'))
+            $widgets[] = (object)[
+                'title' => 'Canteen Transaction',
+                'count' => Canteen::whereDate('time', Carbon::today())->where('type', 0)->count(),
+                'bg'    => 'info',
+                'icon'  => 'pizza-slice',
+                'route' => route('canteen.index'),
+                'bg_color' => 'purple'
             ];
 
         $logs = $this->activityLogRepository->getMineLatest();
