@@ -32,8 +32,8 @@ class CanteenController extends StislaController
     {
         $data = $this->canteenRepository->getAll();
         $today = date('Y-m-d');
-        $totalcekintoday = Canteen::whereDate('time', $today)->count();
-        $totalcekouttoday = Canteen::whereDate('time', $today)->count();
+        $totalcekintoday = Canteen::whereDate('time', $today)->where('type', 0)->count();
+        $totalcekouttoday = Canteen::whereDate('time', $today)->where('type', 1)->count();
 
         // Jika null, set ke 0
         $totalcekintoday = $totalcekintoday ?? 0;
