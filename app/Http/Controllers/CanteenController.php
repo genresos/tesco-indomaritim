@@ -31,9 +31,24 @@ class CanteenController extends StislaController
     public function index()
     {
         $data = $this->canteenRepository->getAll();
+        $today = date('Y-m-d');
+        $totalcekintoday = Canteen::whereDate('time', $today)->count();
+        $totalcekouttoday = Canteen::whereDate('time', $today)->count();
+
+        // Jika null, set ke 0
+        $totalcekintoday = $totalcekintoday ?? 0;
+        $totalcekouttoday = $totalcekouttoday ?? 0;
+
         // return $data;
         $defaultData = $this->getDefaultDataIndex(__('Transaction Canteen'), 'Canteen Transaction History', 'human-capital');
-        $data        = array_merge(['data' => $data], $defaultData);
+        // return $data;
+        $defaultData = $this->getDefaultDataIndex(__('Transaction Canteen'), 'Canteen Transaction History', 'human-capital');
+        $data = array_merge([
+            'data' => $data,
+            'totalcekintoday' => $totalcekintoday,    // Menambahkan totalcekintoday ke dalam array data
+            'totalcekouttoday' => $totalcekouttoday   // Menambahkan totalcekouttoday ke dalam array data
+        ], $defaultData);
+
         return view('stisla.human-capital.canteen.index', $data);
     }
     public function fetchData()
