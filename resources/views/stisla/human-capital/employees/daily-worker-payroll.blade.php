@@ -43,13 +43,13 @@ $canAction = $canUpdate || $canDelete;
             <td>{{ $item->department }}</td>
             <td>{{ $item->status }}</td>
             <td>{{ $item->working_days }}</td>
-            <td>Rp {{ number_format($item->rapel, 0, ',', '.') }}</td>
-            <td>Rp {{ number_format($item->meal_allowance, 0, ',', '.') }}</td>
-            <td>Rp {{ number_format(($item->working_days * $item->rate), 0, ',', '.') }}</td>
-            <td>Rp {{ number_format($item->gross_income, 0, ',', '.') }}</td>
-            <td>Rp {{ number_format($item->loan, 0, ',', '.') }}</td>
-            <td>Rp {{ number_format($item->tax, 0, ',', '.') }}</td>
-            <td>Rp {{ number_format($item->net_income, 0, ',', '.') }}</td>
+            <td>{{ $item->rapel }}</td>
+            <td>{{ $item->meal_allowance }}</td>
+            <td>{{ ($item->working_days * $item->rate) }}</td>
+            <td>{{ $item->gross_income }}</td>
+            <td>{{ $item->loan }}</td>
+            <td>{{ $item->tax }}</td>
+            <td>{{ $item->net_income }}</td>
             <td>{{ $item->bank_name }}</td>
             <td>{{ $item->bank_account_no }}</td>
             <td>{{ $item->bank_account_name }}</td>
