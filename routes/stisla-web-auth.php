@@ -21,7 +21,7 @@ use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\YoutubeController;
 use App\Http\Middleware\FileManagerPermission;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\FingerMachineController;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\CanteenController;
@@ -233,4 +233,10 @@ Route::prefix('canteen')->as('canteen.')->group(function () {
 
     Route::get('/', [CanteenController::class, 'index'])->name('index');
     Route::get('/fetch', [CanteenController::class, 'fetchData'])->name('fetchData');
+});
+
+Route::prefix('warehouse')->as('warehouse.')->group(function () {
+
+    Route::get('inbound', [WarehouseController::class, 'inboundIndex'])->name('inbound.index');
+    // Route::get('/fetch', [CanteenController::class, 'fetchData'])->name('fetchData');
 });
