@@ -25,7 +25,7 @@ class WarehouseController extends StislaController
     public function inboundIndex()
     {
 
-        $data = DB::table('warehouse_inbound')->get();
+        $data = DB::table('warehouse_inbound')->orderBy('id', 'desc')->get();
 
         return view('stisla.warehouse.inbound.index', ['data' => $data]);
     }
