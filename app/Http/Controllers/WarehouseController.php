@@ -30,13 +30,19 @@ class WarehouseController extends StislaController
         return view('stisla.warehouse.inbound.index', ['data' => $data]);
     }
 
-    public function Create()
+    public function CreateInbound()
     {
 
         return view('stisla.warehouse.inbound.create');
     }
 
-    public function storeInbound(Request $request)
+    public function EditInbound($id)
+    {
+
+        return view('stisla.warehouse.inbound.edit', compact('id'));
+    }
+
+    public function StoreInbound(Request $request)
     {
 
         DB::beginTransaction();
@@ -63,9 +69,31 @@ class WarehouseController extends StislaController
             // Rollback Transaction
             DB::rollback();
         }
+    }
 
+    public function UpdateInbound(Request $request, $id)
+    {
 
+        DB::beginTransaction();
+        try {
 
-        // Redirect ke halaman dengan pesan sukses
+            DB::table('warehouse_inbound')
+                ->where('id', $request->id)  // Pastikan Anda menggunakan kondisi yang benar, seperti ID yang unik
+                ->update([
+                    'status' => $request->status,
+                    'updated_at' => Carbon::now(),
+                    'arrival_date' => ($request->status == 'Delivered') ? now()->format('Y-m-d') : null,
+                    'arrival_time' => ($request->status == 'Delivered') ? now()->format('H:i:s') : null,
+                    'updated_by' => Auth::id()  // Pastikan ada kolom untuk menyimpan siapa yang melakukan update
+                ]);
+
+            // Commit Transaction
+            DB::commit();
+
+            return redirect()->route('dashboard.index')->with('successMessage', 'Data update successfully.');
+        } catch (Exception $e) {
+            // Rollback Transaction
+            DB::rollback();
+        }
     }
 }

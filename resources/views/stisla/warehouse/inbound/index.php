@@ -361,10 +361,10 @@
                 $est_date = strftime('%d-%m-%Y', strtotime($row->est_date));
                 $est_time = $row->est_time;
 
-                $arr_date = strftime('%d-%m-%Y', strtotime($row->arrival_date));
-                $arr_time = date('H:i', strtotime($row->arrival_time));
+                $arr_date = ($row->arrival_date) ? strftime('%d-%m-%Y', strtotime($row->arrival_date)) : null;
+                $arr_time = ($row->arrival_date) ? date('H:i', strtotime($row->arrival_time)) : null;
 
-                $qr_combination = "http://localhost:8000/warehouse/inbound/update/" . $row->id;
+                $qr_combination = "http://192.168.77.254:8000/warehouse/inbound/edit/" . $row->id;
 
                 ?>
                 <tr>
