@@ -7,12 +7,15 @@
     <title>RENCANA KEDATANGAN BARANG</title>
     <style>
         /* Global Styles */
+        /* Global Styles */
         body {
             font-family: 'Poppins', Arial, sans-serif;
             background-color: #e6f7ff;
             margin: 0;
-            padding: 80px;
+            padding: 10px;
+            /* Mengurangi padding */
         }
+
 
         h1 {
             color: #333;
@@ -81,28 +84,95 @@
         /* Status Colors */
         .status {
             cursor: pointer;
-            padding: 6px 12px;
+            padding: 10px 20px;
             text-align: center;
-            border-radius: 4px;
+            border-radius: 6px;
             color: white;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease-in-out;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* Soft shadow */
         }
 
+        /* Hover effects */
+        .status:hover {
+            transform: translateY(-3px);
+            /* Lift effect */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            /* Slightly stronger shadow */
+        }
+
+        /* Delivered */
         .status-delivered {
             background-color: #28a745;
+            border: 2px solid #218838;
+            /* Slight darker green border */
         }
 
+        .status-delivered:hover {
+            background-color: #218838;
+            /* Darker green on hover */
+        }
+
+        /* Cancelled */
         .status-cancelled {
             background-color: #dc3545;
+            border: 2px solid #c82333;
+            /* Darker red border */
         }
 
+        .status-cancelled:hover {
+            background-color: #c82333;
+            /* Darker red on hover */
+        }
+
+        /* Delayed */
         .status-delayed {
             background-color: #ffc107;
             color: black;
+            border: 2px solid #e0a800;
+            /* Darker yellow border */
         }
 
+        .status-delayed:hover {
+            background-color: #e0a800;
+            /* Darker yellow on hover */
+        }
+
+        /* Arrived */
         .status-arrived {
             background-color: #6c757d;
+            border: 2px solid #5a6268;
+            /* Darker gray border */
         }
+
+        .status-arrived:hover {
+            background-color: #5a6268;
+            /* Darker gray on hover */
+        }
+
+        /* New */
+        .status-new {
+            background-color: #6c757d;
+            /* Set to gray */
+            border: 2px solid #5a6268;
+            /* Slightly darker gray border */
+        }
+
+        .status-new:hover {
+            background-color: #5a6268;
+            /* Darker gray on hover */
+        }
+
+        /* Focus states for accessibility */
+        .status:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+            /* Blue glow on focus */
+        }
+
 
         /* Modal Styles */
         .modal {
@@ -289,7 +359,7 @@
                 // Tentukan kelas status berdasarkan nama status
                 $statusClass = strtolower(str_replace(" ", "-", $row->status));
                 $est_date = strftime('%d-%m-%Y', strtotime($row->est_date));
-                $est_time = date('H:i', strtotime($row->est_time));
+                $est_time = $row->est_time;
 
                 $arr_date = strftime('%d-%m-%Y', strtotime($row->arrival_date));
                 $arr_time = date('H:i', strtotime($row->arrival_time));

@@ -238,5 +238,8 @@ Route::prefix('canteen')->as('canteen.')->group(function () {
 Route::prefix('warehouse')->as('warehouse.')->group(function () {
 
     Route::get('inbound', [WarehouseController::class, 'inboundIndex'])->name('inbound.index');
+    Route::get('inbound/create', [WarehouseController::class, 'Create'])->name('inbound.create');
+    Route::post('inbound/store', [WarehouseController::class, 'storeInbound'])->name('inbound.store');
+
     // Route::get('/fetch', [CanteenController::class, 'fetchData'])->name('fetchData');
 });
