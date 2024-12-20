@@ -492,7 +492,7 @@
 </body>
 <!-- Footer -->
 <footer style="margin-top: 10px; text-align: center;">
-    <img src="http://192.168.77.72/assets/images/TESCO-01.png" alt="Logo" style="max-width: 150px; height: auto;">
+    <img src="http://localhost/assets/images/TESCO-01.png" alt="Logo" style="max-width: 150px; height: auto;">
     <img src="https://marmin.co.id/content/marmin_page/images/logo.png" alt="Logo" style="max-width: 150px; height: auto;">
     </br>
     <p style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px; color: #333; margin: 0;">
