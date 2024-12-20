@@ -64,7 +64,7 @@ class WarehouseController extends StislaController
             // Commit Transaction
             DB::commit();
 
-            return redirect()->route('warehouse.inbound.index')->with('successMessage', 'Data added successfully.');
+            return redirect()->route('warehouse.inbound.create')->with('successMessage', 'Data added successfully.');
         } catch (Exception $e) {
             // Rollback Transaction
             DB::rollback();

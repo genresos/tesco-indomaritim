@@ -7,13 +7,16 @@
     <title>RENCANA KEDATANGAN BARANG</title>
     <style>
         /* Global Styles */
-        /* Global Styles */
+
         body {
             font-family: 'Poppins', Arial, sans-serif;
-            background-color: #e6f7ff;
+            background: linear-gradient(135deg, #e6f7ff, #ffffff);
+            /* Soft gradient background */
             margin: 0;
             padding: 10px;
-            /* Mengurangi padding */
+            background-size: cover;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+            /* Subtle inner shadow */
         }
 
 
@@ -37,16 +40,15 @@
             /* Mengatur jarak antar baris */
         }
 
-
+        /* Table Styles */
         table {
             width: 100%;
             border-collapse: separate;
-            /* Mengubah menjadi terpisah untuk memberi jarak antar baris */
             border-spacing: 5px;
-            /* Menambahkan jarak antar baris dan kolom */
             margin: 0 auto;
             background-color: #fff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            /* Soft outer shadow for depth */
             border-radius: 8px;
             overflow: hidden;
         }
@@ -94,6 +96,12 @@
             display: inline-block;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             /* Soft shadow */
+            width: 100px;
+            /* Tentukan lebar tombol yang sama */
+            height: 30px;
+            /* Tentukan tinggi tombol yang sama */
+            line-height: 30px;
+            /* Pusatkan teks secara vertikal */
         }
 
         /* Hover effects */
@@ -105,13 +113,13 @@
         }
 
         /* Delivered */
-        .status-delivered {
+        .status-closed {
             background-color: #28a745;
             border: 2px solid #218838;
             /* Slight darker green border */
         }
 
-        .status-delivered:hover {
+        .status-closed:hover {
             background-color: #218838;
             /* Darker green on hover */
         }
@@ -128,15 +136,15 @@
             /* Darker red on hover */
         }
 
-        /* Delayed */
-        .status-delayed {
+        /* partially */
+        .status-partially {
             background-color: #ffc107;
             color: black;
             border: 2px solid #e0a800;
             /* Darker yellow border */
         }
 
-        .status-delayed:hover {
+        .status-partially:hover {
             background-color: #e0a800;
             /* Darker yellow on hover */
         }
@@ -165,6 +173,7 @@
             background-color: #5a6268;
             /* Darker gray on hover */
         }
+
 
         /* Focus states for accessibility */
         .status:focus {
@@ -328,6 +337,18 @@
                 padding-left: 10px;
             }
         }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        footer img {
+            max-width: 150px;
+            height: auto;
+            /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px; */
+        }
     </style>
 
     <!-- DataTables CSS -->
@@ -379,9 +400,10 @@
                     <td><?= $row->vendor ?></td>
                     <td><?= $row->project_name ?></td>
                     <td class="status status-<?= $statusClass ?>"
-                        onclick="openModal('<?= $qr_combination ?>')">
+                        onclick="openModal('<?= $qr_combination ?>', '<?= $row->status ?>')">
                         <?= $row->status ?>
                     </td>
+
                     <td><?= $row->company ?></td>
                 </tr>
             <?php endforeach; ?>
@@ -429,7 +451,12 @@
 
 
         // Fungsi untuk membuka modal dan menampilkan QR code berdasarkan kombinasi data
-        function openModal(qr_combination) {
+        function openModal(qr_combination, $status) {
+            // Cek jika status adalah "Cancelled" atau "Closed"
+            if (status === 'Cancelled' || status === 'Closed') {
+                return; // Jangan buka modal jika statusnya Cancelled atau Closed
+            }
+
             // Ambil elemen gambar dan set URL QR Code-nya
             var qrImage = document.getElementById('qrImage');
             qrImage.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + qr_combination;
@@ -463,5 +490,19 @@
         });
     </script>
 </body>
+<!-- Footer -->
+<footer style="margin-top: 10px; text-align: center;">
+    <img src="http://192.168.77.72/assets/images/TESCO-01.png" alt="Logo" style="max-width: 150px; height: auto;">
+    <img src="https://marmin.co.id/content/marmin_page/images/logo.png" alt="Logo" style="max-width: 150px; height: auto;">
+    </br>
+    <p style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px; color: #333; margin: 0;">
+        <span style="font-weight: bold;">&copy; 2024
+            <a href="https://tescoindomaritim.com" style="color: #007bff; text-decoration: none; font-weight: bold;">Tesco Indomaritim</a>
+            &
+            <a href="https://marmin.co.id" style="color: #007bff; text-decoration: none; font-weight: bold;">Marmin</a>.
+        </span>
+        All rights reserved.
+    </p>
+</footer>
 
 </html>

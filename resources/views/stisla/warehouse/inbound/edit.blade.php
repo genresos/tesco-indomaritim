@@ -23,7 +23,8 @@
                                     <label for="status">{{ __('Status') }}</label>
                                     <select id="status" name="status" class="form-control" required>
                                         <option value="" disabled selected>{{ __('Select Status') }}</option> <!-- Ganti ! untuk selected -->
-                                        <option value="Delivered">Delivered</option>
+                                        <option value="Partially">Partially</option>
+                                        <option value="Closed">Closed</option>
                                         <option value="Canceled">Canceled</option>
                                         <!-- <option value="3">3 Week</option> -->
                                     </select>
