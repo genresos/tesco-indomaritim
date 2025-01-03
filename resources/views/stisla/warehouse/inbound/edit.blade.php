@@ -6,6 +6,13 @@
 </div>
 <div class="section-body">
 
+    <!-- Menampilkan pesan error jika ada -->
+    @if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -22,19 +29,16 @@
                                 <div class="form-group">
                                     <label for="status">{{ __('Status') }}</label>
                                     <select id="status" name="status" class="form-control" required>
-                                        <option value="" disabled selected>{{ __('Select Status') }}</option> <!-- Ganti ! untuk selected -->
+                                        <option value="" disabled selected>{{ __('Select Status') }}</option>
                                         <option value="Partially">Partially</option>
                                         <option value="Closed">Closed</option>
-                                        <option value="Canceled">Canceled</option>
-                                        <!-- <option value="3">3 Week</option> -->
+                                        <option value="Cancelled">Cancelled</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Please select a status.
                                     </div>
                                 </div>
                             </div>
-
-
 
                             <div class="col-md-12" id="formAreaButton">
                                 <br>

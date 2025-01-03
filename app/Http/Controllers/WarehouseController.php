@@ -38,7 +38,6 @@ class WarehouseController extends StislaController
 
     public function EditInbound($id)
     {
-
         return view('stisla.warehouse.inbound.edit', compact('id'));
     }
 
@@ -73,6 +72,12 @@ class WarehouseController extends StislaController
 
     public function UpdateInbound(Request $request, $id)
     {
+        $item = DB::table('warehouse_inbound')->where('id', $id)->first();
+
+        if ($item->updated_at != null) {
+            session()->flash('error', 'Data ini sudah diupdate.');
+            return redirect()->back();
+        }
 
         DB::beginTransaction();
         try {
@@ -90,7 +95,7 @@ class WarehouseController extends StislaController
             // Commit Transaction
             DB::commit();
 
-            return redirect()->route('dashboard.index')->with('successMessage', 'Data update successfully.');
+            return redirect()->route('warehouse.inbound.index')->with('successMessage', 'Data update successfully.');
         } catch (Exception $e) {
             // Rollback Transaction
             DB::rollback();
