@@ -10,6 +10,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
+                    <a href="{{ route('warehouse.inbound.list') }}" class="btn btn-primary">List Data</a>
+                </div>
+                <div class="card-header">
                     <h4><i class="fas fa-warehouse"></i> Input Data</h4>
                 </div>
                 <div class="card-body">

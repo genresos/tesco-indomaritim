@@ -6,26 +6,38 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\WarehouseRepository;
 
 class WarehouseController extends StislaController
 {
 
-
+    /**
+     * menu repository
+     *
+     * @var WarehouseRepository
+     */
+    private WarehouseRepository $warehouseRepository;
     public function __construct()
     {
-        // parent::__construct();
+        parent::__construct();
 
-        // $this->defaultMiddleware('Canteen Transaction');
+        $this->defaultMiddleware('Warehouse Inbound Create');
 
-        // $this->icon           = 'fa fa-pizza-slice';
-        // $this->viewFolder     = 'canteen-transaction';
-        // $this->canteenRepository = new CanteenTransactionRepository;
+        $this->icon           = 'fas fa-archive';
+        $this->viewFolder     = 'employee-management';
+        $this->warehouseRepository = new WarehouseRepository;
     }
 
     public function inboundIndex()
     {
 
-        $data = DB::table('warehouse_inbound')->orderBy('id', 'desc')->get();
+        $data = DB::table('warehouse_inbound as wi')
+            ->leftJoin('users as creator', 'creator.id', '=', 'wi.created_by')
+            ->leftJoin('users as updater', 'updater.id', '=', 'wi.updated_by')
+            ->select('wi.*', 'creator.name as creator', 'updater.name as updater')
+            ->orderByRaw("CASE WHEN wi.status = 'New' THEN 0 ELSE 1 END")
+            ->orderByDesc('wi.id')
+            ->get();
 
         return view('stisla.warehouse.inbound.index', ['data' => $data]);
     }
@@ -100,5 +112,16 @@ class WarehouseController extends StislaController
             // Rollback Transaction
             DB::rollback();
         }
+    }
+
+    public function inboundList()
+    {
+
+        $data = $this->warehouseRepository->getListData();
+
+        $defaultData = $this->getDefaultDataIndex(__('List Warehouse Inbound'), 'Warehouse Inbound', '');
+        $data        = array_merge(['data' => $data], $defaultData);
+
+        return view('stisla.warehouse.inbound.list', $data);
     }
 }
