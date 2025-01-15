@@ -53,19 +53,43 @@
             overflow: hidden;
         }
 
+        /* Membuat table scrollable */
+        .table-wrapper {
+            max-height: 600px;
+            /* Ubah nilai sesuai keinginan */
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .table-header {
+            position: sticky;
+            top: 0;
+            background-color: white;
+            z-index: 1;
+        }
+
+        .table-body {
+            max-height: 700px;
+            /* Sesuaikan dengan tinggi yang diinginkan untuk body tabel */
+            overflow-y: auto;
+        }
+
+        .table-body table {
+            width: 100%;
+        }
+
         th {
             background-color: #007bff;
             color: #fff;
             text-transform: uppercase;
             font-size: 14px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #eaf4ff;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            padding: 10px;
+            /* Pastikan padding konsisten dengan cell data */
         }
 
         td {
@@ -310,34 +334,6 @@
             background-color: #0056b3;
         }
 
-        /* Responsif: layar kecil */
-        @media screen and (max-width: 768px) {
-            table {
-                border: 0;
-            }
-
-            th,
-            td {
-                display: block;
-                text-align: right;
-                padding-left: 50%;
-                position: relative;
-            }
-
-            th::before {
-                content: attr(data-title);
-                position: absolute;
-                left: 10px;
-                font-weight: bold;
-                text-transform: uppercase;
-            }
-
-            td {
-                text-align: left;
-                padding-left: 10px;
-            }
-        }
-
         footer {
             margin-top: 40px;
             text-align: center;
@@ -357,58 +353,71 @@
 
 <body>
     <h1>RENCANA KEDATANGAN BARANG - <span id="current-date"></span></h1>
-    <table id="inboundTable">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>SITE</th>
-                <th>Est. Date</th>
-                <th>Est. Time</th>
-                <th>Arrival Date</th>
-                <th>Arrival Time</th>
-                <th>PO No.</th>
-                <th>WO No.</th>
-                <th>VENDOR</th>
-                <th>PROJECT NAME</th>
-                <th>STATUS</th>
-                <th>COMPANY</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($data as $row): ?>
-                <?php
-                // Tentukan kelas status berdasarkan nama status
-                $statusClass = strtolower(str_replace(" ", "-", $row->status));
-                $est_date = strftime('%d-%m-%Y', strtotime($row->est_date));
-                $est_time = $row->est_time;
 
-                $arr_date = ($row->arrival_date) ? strftime('%d-%m-%Y', strtotime($row->arrival_date)) : null;
-                $arr_time = ($row->arrival_date) ? date('H:i', strtotime($row->arrival_time)) : null;
+    <div class="table-wrapper">
+        <table id="inboundTable">
+            <div class="table-header">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>SITE</th>
+                            <th>Est. Date</th>
+                            <th>Est. Time</th>
+                            <th>Arrival Date</th>
+                            <th>Arrival Time</th>
+                            <th>PO No.</th>
+                            <th>WO No.</th>
+                            <th>VENDOR</th>
+                            <th>PROJECT NAME</th>
+                            <th>STATUS</th>
+                            <th>COMPANY</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="table-body">
+                <table>
+                    <tbody>
+                        <?php foreach ($data as $row): ?>
+                            <?php
+                            // Tentukan kelas status berdasarkan nama status
+                            $statusClass = strtolower(str_replace(" ", "-", $row->status));
+                            $est_date = strftime('%d-%m-%Y', strtotime($row->est_date));
+                            $est_time = $row->est_time;
 
-                $qr_combination = "http://192.168.77.254:8000/warehouse/inbound/edit/" . $row->id;
+                            $arr_date = ($row->arrival_date) ? strftime('%d-%m-%Y', strtotime($row->arrival_date)) : null;
+                            $arr_time = ($row->arrival_date) ? date('H:i', strtotime($row->arrival_time)) : null;
 
-                ?>
-                <tr>
-                    <td><?= $row->id ?></td>
-                    <td><?= $row->site ?></td>
-                    <td><?= $est_date ?></td>
-                    <td><?= $est_time ?></td>
-                    <td><?= $arr_date ?></td>
-                    <td><?= $arr_time ?></td>
-                    <td><?= $row->po_number ?></td>
-                    <td><?= $row->wo_number ?></td>
-                    <td><?= $row->vendor ?></td>
-                    <td><?= $row->project_name ?></td>
-                    <td class="status status-<?= $statusClass ?>"
-                        onclick="openModal('<?= $qr_combination ?>', '<?= $row->status ?>')">
-                        <?= $row->status ?>
-                    </td>
+                            $qr_combination = "http://192.168.77.254:8000/warehouse/inbound/edit/" . $row->id;
 
-                    <td><?= $row->company ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+                            ?>
+                            <tr>
+                                <td><?= $row->id ?></td>
+                                <td><?= $row->site ?></td>
+                                <td><?= $est_date ?></td>
+                                <td><?= $est_time ?></td>
+                                <td><?= $arr_date ?></td>
+                                <td><?= $arr_time ?></td>
+                                <td><?= $row->po_number ?></td>
+                                <td><?= $row->wo_number ?></td>
+                                <td><?= $row->vendor ?></td>
+                                <td><?= $row->project_name ?></td>
+                                <td class="status status-<?= $statusClass ?>"
+                                    onclick="openModal('<?= $qr_combination ?>', '<?= $row->status ?>')">
+                                    <?= $row->status ?>
+                                </td>
+
+                                <td><?= $row->company ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+        </table>
+    </div>
+
 
     <!-- Modal -->
     <!-- Modal -->
@@ -480,29 +489,48 @@
         $(document).ready(function() {
             // Inisialisasi DataTables
             $('#inboundTable').DataTable({
-                "paging": true,
-                "searching": true,
+                "paging": false,
+                "searching": false,
                 "ordering": true,
-                "info": true,
-                "lengthChange": false,
-                "autoWidth": true,
+                "info": false,
+                "lengthChange": true,
+                "autoWidth": false,
             });
+        });
+
+        // Function to make the table content scroll automatically
+        function autoScrollTable() {
+            var tableWrapper = document.querySelector('.table-body');
+            var table = tableWrapper.querySelector('table');
+
+            // Check if we've scrolled to the bottom of the table
+            if (tableWrapper.scrollTop + tableWrapper.clientHeight >= tableWrapper.scrollHeight) {
+                // When we reach the bottom, append a copy of the table to continue the loop
+                duplicateTableBody();
+                // Scroll back to the top of the newly added table to maintain the loop
+                tableWrapper.scrollTop -= table.offsetHeight;
+            } else {
+                // Scroll down smoothly by 1px
+                tableWrapper.scrollTop += 1;
+            }
+        }
+
+        // Create a duplicate of the table body to loop the scroll
+        function duplicateTableBody() {
+            var tableWrapper = document.querySelector('.table-body');
+            var table = tableWrapper.querySelector('table');
+
+            // Clone the table and append it to the wrapper to create a seamless loop
+            var clonedTable = table.cloneNode(true);
+            tableWrapper.appendChild(clonedTable);
+        }
+
+        // Initialize the duplication of the table and start scrolling
+        document.addEventListener("DOMContentLoaded", function() {
+            // Start the auto-scrolling and duplicate process
+            setInterval(autoScrollTable, 50); // Call autoScrollTable every 10 milliseconds
         });
     </script>
 </body>
-<!-- Footer -->
-<footer style="margin-top: 10px; text-align: center;">
-    <img src="http://103.165.130.102/assets/images/TESCO-01.png" alt="Logo" style="max-width: 150px; height: auto;">
-    <img src="https://marmin.co.id/content/marmin_page/images/logo.png" alt="Logo" style="max-width: 150px; height: auto;">
-    </br>
-    <p style="font-family: 'Poppins', Arial, sans-serif; font-size: 16px; color: #333; margin: 0;">
-        <span style="font-weight: bold;">&copy; 2024
-            <a href="https://tescoindomaritim.com" style="color: #007bff; text-decoration: none; font-weight: bold;">Tesco Indomaritim</a>
-            &
-            <a href="https://marmin.co.id" style="color: #007bff; text-decoration: none; font-weight: bold;">Marmin</a>.
-        </span>
-        All rights reserved.
-    </p>
-</footer>
 
 </html>
