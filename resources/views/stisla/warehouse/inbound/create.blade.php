@@ -55,6 +55,7 @@
                                         <option value="PAGI">PAGI</option>
                                         <option value="SIANG">SIANG</option>
                                         <option value="SORE">SORE</option>
+                                        <option value="MALAM">MALAM</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Please select a time.
@@ -113,10 +114,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="company">{{ __('Company') }}</label>
-                                    <select id="company" name="company" class="form-control" required>
-                                        <option value="" disabled selected>{{ __('Select company') }}</option> <!-- Ganti ! untuk selected -->
-                                        <option value="TESCO">TESCO</option>
-                                        <option value="MARMIN">MARMIN</option>
+                                    <select id="company" name="company" class="form-control" required disabled>
+                                        <option value="TESCO" selected>TESCO</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Please select a company.
