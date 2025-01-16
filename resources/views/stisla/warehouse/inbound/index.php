@@ -84,18 +84,25 @@
 
         /* Table Cell Styling */
         td {
-            padding: 14px;
+            padding: 18px;
+            /* Menambahkan padding lebih banyak */
             text-align: center;
             color: #333;
-            font-size: 13px;
+            font-size: 16px;
+            /* Ukuran font sedikit lebih besar */
             transition: all 0.3s ease;
             border-bottom: 2px solid #eee;
+            font-weight: 500;
+            /* Memberikan sedikit ketebalan pada font */
         }
 
         td:hover {
-            background-color: #f1f1f1;
+            background-color: #f0f8ff;
+            /* Warna latar belakang saat hover */
             cursor: pointer;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            /* Efek sedikit terangkat saat hover */
         }
 
         /* Alternating Row Colors */
@@ -105,6 +112,56 @@
 
         tr:nth-child(even) {
             background-color: #ffffff;
+        }
+
+        /* Ukuran khusus untuk kolom # di header */
+        th:nth-child(1) {
+            font-size: 12px;
+            /* Ukuran font lebih kecil */
+            padding: 10px 8px;
+            /* Padding lebih kecil */
+        }
+
+        /* Ukuran khusus untuk kolom # di body */
+        td:nth-child(1) {
+            font-size: 14px;
+            /* Ukuran font lebih kecil */
+            padding: 10px 8px;
+            /* Padding lebih kecil */
+            text-align: center;
+            /* Memastikan teks tetap terpusat */
+        }
+
+        /* Menyesuaikan lebar kolom # agar lebih kecil */
+        th:nth-child(1),
+        td:nth-child(1) {
+            width: 50px;
+            /* Lebar kolom lebih kecil */
+        }
+
+        /* Ukuran khusus untuk kolom Project Name di header */
+        th:nth-child(10) {
+            font-size: 16px;
+            /* Ukuran font lebih besar */
+            padding: 14px 12px;
+            /* Padding lebih besar */
+        }
+
+        /* Ukuran khusus untuk kolom Project Name di body */
+        td:nth-child(10) {
+            font-size: 16px;
+            /* Ukuran font lebih besar */
+            padding: 14px 12px;
+            /* Padding lebih besar */
+            text-align: center;
+            /* Memastikan teks tetap terpusat */
+        }
+
+        /* Menyesuaikan lebar kolom Project Name agar lebih besar */
+        th:nth-child(10),
+        td:nth-child(10) {
+            width: 180px;
+            /* Lebar kolom Project Name lebih besar */
         }
 
         /* Status Badge Styling */
@@ -122,18 +179,30 @@
             height: 30px;
             line-height: 30px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+            /* Posisi tengah */
+            margin: 0 auto;
+            /* untuk elemen block atau inline-block */
+            display: block;
+            /* agar margin auto dapat bekerja */
+            text-align: center;
+            /* memastikan teks berada di tengah */
         }
 
         /* Status Colors */
-        .status-closed {
+        .status-received {
             background-color: #28a745;
         }
 
-        .status-cancelled {
+        .status-received-late {
+            background-color: #28a745;
+        }
+
+        .status-delay {
             background-color: #dc3545;
         }
 
-        .status-partially {
+        .status-partial {
             background-color: #ffc107;
             color: black;
         }
@@ -298,7 +367,7 @@
 
         // Function to open modal
         function openModal(qr_combination, status) {
-            if (status === 'Cancelled' || status === 'Closed') {
+            if (status === 'Delay' || status === 'Received') {
                 return;
             }
             var qrImage = document.getElementById('qrImage');

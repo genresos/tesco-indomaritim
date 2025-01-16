@@ -30,9 +30,9 @@
                                     <label for="status">{{ __('Status') }}</label>
                                     <select id="status" name="status" class="form-control" required>
                                         <option value="" disabled selected>{{ __('Select Status') }}</option>
-                                        <option value="Partially">Partially</option>
-                                        <option value="Closed">Closed</option>
-                                        <option value="Cancelled">Cancelled</option>
+                                        <option value="Partial">Partial</option>
+                                        <option value="Received">Received</option>
+                                        <option value="Delay">Delay</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Please select a status.

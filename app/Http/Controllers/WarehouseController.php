@@ -85,7 +85,12 @@ class WarehouseController extends StislaController
     public function UpdateInbound(Request $request, $id)
     {
         $item = DB::table('warehouse_inbound')->where('id', $id)->first();
-
+        /* validasi jika barang diterima sudah lewat hari status jadi Received Late */
+        if ($request->status == 'Received' && $item->est_date < date('Y-m-d')) {
+            $status = 'Received Late';
+        } else {
+            $status = $request->status;
+        }
         if ($item->updated_at != null) {
             session()->flash('error', 'Data ini sudah diupdate.');
             return redirect()->back();
@@ -97,10 +102,10 @@ class WarehouseController extends StislaController
             DB::table('warehouse_inbound')
                 ->where('id', $request->id)  // Pastikan Anda menggunakan kondisi yang benar, seperti ID yang unik
                 ->update([
-                    'status' => $request->status,
+                    'status' => $status,
                     'updated_at' => Carbon::now(),
-                    'arrival_date' => ($request->status == 'Delivered') ? now()->format('Y-m-d') : null,
-                    'arrival_time' => ($request->status == 'Delivered') ? now()->format('H:i:s') : null,
+                    'arrival_date' => ($request->status == 'Received') ? now()->format('Y-m-d') : null,
+                    'arrival_time' => ($request->status == 'Received') ? now()->format('H:i:s') : null,
                     'updated_by' => Auth::id()  // Pastikan ada kolom untuk menyimpan siapa yang melakukan update
                 ]);
 
