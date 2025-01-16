@@ -35,6 +35,10 @@ class WarehouseController extends StislaController
             ->leftJoin('users as creator', 'creator.id', '=', 'wi.created_by')
             ->leftJoin('users as updater', 'updater.id', '=', 'wi.updated_by')
             ->select('wi.*', 'creator.name as creator', 'updater.name as updater')
+            ->where(function ($query) {
+                $query->whereDate('wi.est_date', '=', now()->toDateString())
+                    ->orWhere('wi.status', '=', 'New');
+            })
             ->orderByRaw("CASE WHEN wi.status = 'New' THEN 0 ELSE 1 END")
             ->orderByDesc('wi.id')
             ->get();
