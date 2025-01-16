@@ -253,6 +253,17 @@
             width: 80%;
             max-width: 500px;
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+
+            /* Menambahkan Flexbox untuk pemusatan */
+            display: flex;
+            flex-direction: column;
+            /* Mengatur agar konten modal terorganisir secara vertikal */
+            justify-content: center;
+            /* Memusatkan secara vertikal */
+            align-items: center;
+            /* Memusatkan secara horizontal */
+            text-align: center;
+            /* Memastikan teks dan elemen lain dalam modal terpusat */
         }
 
         .modal-close {
@@ -316,7 +327,7 @@
                         $arr_date = ($row->arrival_date) ? strftime('%d-%m-%Y', strtotime($row->arrival_date)) : null;
                         $arr_time = ($row->arrival_date) ? date('H:i', strtotime($row->arrival_time)) : null;
 
-                        $qr_combination = "http://192.168.77.254:8000/warehouse/inbound/edit/" . $row->id;
+                        $qr_combination = "https://monitoring.marmin.co.id/warehouse/inbound/edit/" . $row->id;
                         ?>
                         <tr>
                             <td><?= $row->id ?></td>
