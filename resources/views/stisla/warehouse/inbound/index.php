@@ -378,7 +378,7 @@
 
         // Function to open modal
         function openModal(qr_combination, status) {
-            if (status === 'Delay' || status === 'Received') {
+            if (status === 'Delay' || status === 'Received' || status === 'Partial') {
                 return;
             }
             var qrImage = document.getElementById('qrImage');
@@ -431,6 +431,11 @@
                 autoWidth: false
             });
         });
+
+        // Refresh halaman setiap 3 detik
+        setInterval(function() {
+            location.reload();
+        }, 60000); // 60000ms = 1 menit
     </script>
 </body>
 
