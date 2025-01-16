@@ -4,210 +4,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <title>RENCANA KEDATANGAN BARANG</title>
     <style>
         /* Global Styles */
-
         body {
             font-family: 'Poppins', Arial, sans-serif;
-            background: linear-gradient(135deg, #e6f7ff, #ffffff);
-            /* Soft gradient background */
+            background: linear-gradient(135deg, #E0F7FA, #FFFFFF);
             margin: 0;
-            padding: 10px;
+            padding: 20px;
             background-size: cover;
             box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
-            /* Subtle inner shadow */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
         }
 
-
+        /* Title */
         h1 {
             color: #333;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             font-family: 'Poppins', sans-serif;
-            /* Mengganti font dengan font yang lebih modern */
-            font-size: 40px;
-            /* Menyesuaikan ukuran font */
-            font-weight: bold;
-            /* Membuat teks lebih tebal */
-            letter-spacing: 2px;
-            /* Memberikan jarak antar huruf */
+            font-size: 45px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            /* Membuat teks menjadi huruf besar semua */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            /* Memberikan bayangan teks untuk efek 3D */
-            line-height: 1.4;
-            /* Mengatur jarak antar baris */
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+            line-height: 1.3;
         }
 
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 5px;
-            margin: 0 auto;
-            background-color: #fff;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            /* Soft outer shadow for depth */
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        /* Membuat table scrollable */
+        /* Table Wrapper - Use Flexbox to fill space */
         .table-wrapper {
-            max-height: 600px;
-            /* Ubah nilai sesuai keinginan */
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
             overflow-y: auto;
             margin-top: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 12px;
+            position: relative;
+            height: 100%;
+            /* Ensures it fills the height */
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            transition: all 0.3s ease;
         }
 
-        .table-header {
-            position: sticky;
-            top: 0;
-            background-color: white;
-            z-index: 1;
-        }
-
-        .table-body {
-            max-height: 700px;
-            /* Sesuaikan dengan tinggi yang diinginkan untuk body tabel */
-            overflow-y: auto;
-        }
-
-        .table-body table {
+        /* Table Styling */
+        table {
             width: 100%;
-        }
-
-        th {
-            background-color: #007bff;
-            color: #fff;
-            text-transform: uppercase;
-            font-size: 14px;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-            padding: 10px;
-            /* Pastikan padding konsisten dengan cell data */
-        }
-
-        td {
-            font-family: 'Poppins', Arial, sans-serif;
-            font-size: 14px;
-            padding: 10px;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border-spacing: 0;
+            background-color: #fff;
+            border-radius: 12px;
             overflow: hidden;
         }
 
-        td:nth-child(9) {
+        /* Table Header Styling */
+        th {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: #fff;
+            padding: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 3px solid #0056b3;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
 
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            max-width: 500px;
-            /* Lebar maksimum untuk kolom */
+        th:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+
+        /* Table Cell Styling */
+        td {
+            padding: 14px;
+            text-align: center;
+            color: #333;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid #eee;
+        }
+
+        td:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Alternating Row Colors */
+        tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+
+        /* Status Badge Styling */
+        .status {
+            cursor: pointer;
+            padding: 8px 15px;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            color: white;
+            transition: all 0.3s ease-in-out;
+            display: inline-block;
+            width: 100px;
+            height: 30px;
+            line-height: 30px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         /* Status Colors */
-        .status {
-            cursor: pointer;
-            padding: 10px 20px;
-            text-align: center;
-            border-radius: 6px;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            transition: all 0.3s ease-in-out;
-            display: inline-block;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            /* Soft shadow */
-            width: 100px;
-            /* Tentukan lebar tombol yang sama */
-            height: 30px;
-            /* Tentukan tinggi tombol yang sama */
-            line-height: 30px;
-            /* Pusatkan teks secara vertikal */
-        }
-
-        /* Hover effects */
-        .status:hover {
-            transform: translateY(-3px);
-            /* Lift effect */
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-            /* Slightly stronger shadow */
-        }
-
-        /* Delivered */
         .status-closed {
             background-color: #28a745;
-            border: 2px solid #218838;
-            /* Slight darker green border */
         }
 
-        .status-closed:hover {
-            background-color: #218838;
-            /* Darker green on hover */
-        }
-
-        /* Cancelled */
         .status-cancelled {
             background-color: #dc3545;
-            border: 2px solid #c82333;
-            /* Darker red border */
         }
 
-        .status-cancelled:hover {
-            background-color: #c82333;
-            /* Darker red on hover */
-        }
-
-        /* partially */
         .status-partially {
             background-color: #ffc107;
             color: black;
-            border: 2px solid #e0a800;
-            /* Darker yellow border */
         }
 
-        .status-partially:hover {
-            background-color: #e0a800;
-            /* Darker yellow on hover */
-        }
-
-        /* Arrived */
         .status-arrived {
             background-color: #6c757d;
-            border: 2px solid #5a6268;
-            /* Darker gray border */
         }
 
-        .status-arrived:hover {
-            background-color: #5a6268;
-            /* Darker gray on hover */
-        }
-
-        /* New */
         .status-new {
-            background-color: #6c757d;
-            /* Set to gray */
-            border: 2px solid #5a6268;
-            /* Slightly darker gray border */
+            background-color: #007bff;
         }
 
-        .status-new:hover {
-            background-color: #5a6268;
-            /* Darker gray on hover */
+        /* Status Hover */
+        .status:hover {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
         }
 
-
-        /* Focus states for accessibility */
-        .status:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
-            /* Blue glow on focus */
+        /* Scrollable Table Body */
+        .table-body {
+            flex-grow: 1;
+            /* Make the table body take up remaining space */
+            overflow-y: auto;
+            padding-bottom: 10px;
+            /* Padding for smooth scrolling */
         }
 
-
-        /* Modal Styles */
+        /* Modal Styling */
         .modal {
             display: none;
             position: fixed;
@@ -216,116 +170,28 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
             background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 10% auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 50%;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-        }
-
-        .modal-close {
-            background-color: #dc3545;
-            color: red;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .modal-close:hover {
-            background-color: #c82333;
-        }
-
-        td.status {
-            font-size: 14px;
-            /* Smaller font size */
-            padding: 5px 10px;
-            /* Adjust padding */
-            text-align: center;
-            /* Center the text */
-            border-radius: 4px;
-            /* Optional: add rounded corners */
-            cursor: pointer;
-            /* Change the cursor to a pointer on hover */
-        }
-
-        td.status:hover {
-            background-color: #f0f0f0;
-            /* Optional: change background on hover */
-            transition: background-color 0.3s ease;
-            /* Smooth background transition */
-        }
-
-        /* Modal Background */
-        .modal {
-            display: none;
-            /* Hidden by default, show via JS */
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            /* Transparent black */
-            overflow: auto;
             padding-top: 50px;
-            transition: opacity 0.3s ease;
+            overflow: auto;
+            transition: all 0.3s ease;
         }
 
-        /* Modal Content Box */
         .modal-content {
             background-color: #fff;
             margin: 15% auto;
             padding: 30px;
-            border-radius: 10px;
+            border-radius: 12px;
             width: 80%;
             max-width: 500px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        /* Title Styling */
-        .modal-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        /* QR Code Container */
-        .qr-container {
-            margin-bottom: 30px;
-        }
-
-        /* QR Code Styling */
-        .qr-code {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Footer / Close Button */
-        .modal-footer {
-            margin-top: 20px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
         }
 
         .modal-close {
-            background-color: #007BFF;
+            background-color: #007bff;
             color: white;
-            padding: 12px 24px;
+            padding: 14px 26px;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
@@ -334,16 +200,9 @@
             background-color: #0056b3;
         }
 
-        footer {
-            margin-top: 40px;
-            text-align: center;
-        }
-
-        footer img {
-            max-width: 150px;
-            height: auto;
-            /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 8px; */
+        /* Smooth Scroll for Table */
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 
@@ -355,77 +214,69 @@
     <h1>RENCANA KEDATANGAN BARANG - <span id="current-date"></span></h1>
 
     <div class="table-wrapper">
+        <!-- Table Header -->
         <table id="inboundTable">
-            <div class="table-header">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>SITE</th>
-                            <th>Est. Date</th>
-                            <th>Est. Time</th>
-                            <th>Arrival Date</th>
-                            <th>Arrival Time</th>
-                            <th>PO No.</th>
-                            <th>WO No.</th>
-                            <th>VENDOR</th>
-                            <th>PROJECT NAME</th>
-                            <th>STATUS</th>
-                            <th>COMPANY</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-            <div class="table-body">
-                <table>
-                    <tbody>
-                        <?php foreach ($data as $row): ?>
-                            <?php
-                            // Tentukan kelas status berdasarkan nama status
-                            $statusClass = strtolower(str_replace(" ", "-", $row->status));
-                            $est_date = strftime('%d-%m-%Y', strtotime($row->est_date));
-                            $est_time = $row->est_time;
-
-                            $arr_date = ($row->arrival_date) ? strftime('%d-%m-%Y', strtotime($row->arrival_date)) : null;
-                            $arr_time = ($row->arrival_date) ? date('H:i', strtotime($row->arrival_time)) : null;
-
-                            $qr_combination = "http://192.168.77.254:8000/warehouse/inbound/edit/" . $row->id;
-
-                            ?>
-                            <tr>
-                                <td><?= $row->id ?></td>
-                                <td><?= $row->site ?></td>
-                                <td><?= $est_date ?></td>
-                                <td><?= $est_time ?></td>
-                                <td><?= $arr_date ?></td>
-                                <td><?= $arr_time ?></td>
-                                <td><?= $row->po_number ?></td>
-                                <td><?= $row->wo_number ?></td>
-                                <td><?= $row->vendor ?></td>
-                                <td><?= $row->project_name ?></td>
-                                <td class="status status-<?= $statusClass ?>"
-                                    onclick="openModal('<?= $qr_combination ?>', '<?= $row->status ?>')">
-                                    <?= $row->status ?>
-                                </td>
-
-                                <td><?= $row->company ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>SITE</th>
+                    <th>Est. Date</th>
+                    <th>Est. Time</th>
+                    <th>Arrival Date</th>
+                    <th>Arrival Time</th>
+                    <th>PO No.</th>
+                    <th>WO No.</th>
+                    <th>VENDOR</th>
+                    <th>PROJECT NAME</th>
+                    <th>STATUS</th>
+                    <th>COMPANY</th>
+                </tr>
+            </thead>
         </table>
+
+        <!-- Table Body (Scrollable) -->
+        <div class="table-body">
+            <table>
+                <tbody>
+                    <?php foreach ($data as $row): ?>
+                        <?php
+                        $statusClass = strtolower(str_replace(" ", "-", $row->status));
+                        $est_date = strftime('%d-%m-%Y', strtotime($row->est_date));
+                        $est_time = $row->est_time;
+
+                        $arr_date = ($row->arrival_date) ? strftime('%d-%m-%Y', strtotime($row->arrival_date)) : null;
+                        $arr_time = ($row->arrival_date) ? date('H:i', strtotime($row->arrival_time)) : null;
+
+                        $qr_combination = "http://192.168.77.254:8000/warehouse/inbound/edit/" . $row->id;
+                        ?>
+                        <tr>
+                            <td><?= $row->id ?></td>
+                            <td><?= $row->site ?></td>
+                            <td><?= $est_date ?></td>
+                            <td><?= $est_time ?></td>
+                            <td><?= $arr_date ?></td>
+                            <td><?= $arr_time ?></td>
+                            <td><?= $row->po_number ?></td>
+                            <td><?= $row->wo_number ?></td>
+                            <td><?= $row->vendor ?></td>
+                            <td><?= $row->project_name ?></td>
+                            <td class="status status-<?= $statusClass ?>"
+                                onclick="openModal('<?= $qr_combination ?>', '<?= $row->status ?>')">
+                                <?= $row->status ?>
+                            </td>
+                            <td><?= $row->company ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-
-    <!-- Modal -->
     <!-- Modal -->
     <div id="statusModal" class="modal">
         <div class="modal-content">
             <h3>SCAN me</h3>
             <img id="qrImage" src="" alt="QR Code" style="max-width: 100%; height: auto; margin-bottom: 50px;">
-            <p></p>
             <button class="modal-close" onclick="closeModal()">Close</button>
         </div>
     </div>
@@ -433,85 +284,43 @@
     <!-- DataTables JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
     <script>
         // Mendapatkan tanggal saat ini
         const currentDate = new Date();
-
-        // Format tanggal dalam format DD MMMM YYYY
         const options = {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
         };
         const formattedDate = currentDate.toLocaleDateString('id-ID', options);
-
-        // Menampilkan tanggal pada elemen dengan id 'current-date'
         document.getElementById('current-date').textContent = formattedDate;
-    </script>
-    <script>
-        var refreshTimeout; // Variable to store the timeout reference
 
-        // Function to refresh the page every 5 seconds
-        function startAutoRefresh() {
-            refreshTimeout = setTimeout(function() {
-                location.reload();
-            }, 50000); // Set the refresh time to 5 seconds
-        }
-
-
-        // Fungsi untuk membuka modal dan menampilkan QR code berdasarkan kombinasi data
-        function openModal(qr_combination, $status) {
-            // Cek jika status adalah "Cancelled" atau "Closed"
+        // Function to open modal
+        function openModal(qr_combination, status) {
             if (status === 'Cancelled' || status === 'Closed') {
-                return; // Jangan buka modal jika statusnya Cancelled atau Closed
+                return;
             }
-
-            // Ambil elemen gambar dan set URL QR Code-nya
             var qrImage = document.getElementById('qrImage');
             qrImage.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + qr_combination;
-
-            // Tampilkan modal
             var modal = document.getElementById('statusModal');
             modal.style.display = 'block';
         }
 
-        // Fungsi untuk menutup modal
+        // Function to close modal
         function closeModal() {
             var modal = document.getElementById('statusModal');
             modal.style.display = 'none';
             location.reload();
-
         }
 
-        // Start the auto-refresh when the page loads
-        startAutoRefresh();
-
-        $(document).ready(function() {
-            // Inisialisasi DataTables
-            $('#inboundTable').DataTable({
-                "paging": false,
-                "searching": false,
-                "ordering": true,
-                "info": false,
-                "lengthChange": true,
-                "autoWidth": false,
-            });
-        });
-
-        // Function to make the table content scroll automatically
+        // Start auto-scrolling
         function autoScrollTable() {
-            var tableWrapper = document.querySelector('.table-body');
-            var table = tableWrapper.querySelector('table');
-
-            // Check if we've scrolled to the bottom of the table
-            if (tableWrapper.scrollTop + tableWrapper.clientHeight >= tableWrapper.scrollHeight) {
-                // When we reach the bottom, append a copy of the table to continue the loop
+            var tableBody = document.querySelector('.table-body');
+            if (tableBody.scrollTop + tableBody.clientHeight >= tableBody.scrollHeight) {
                 duplicateTableBody();
-                // Scroll back to the top of the newly added table to maintain the loop
-                tableWrapper.scrollTop -= table.offsetHeight;
             } else {
-                // Scroll down smoothly by 1px
-                tableWrapper.scrollTop += 1;
+                tableBody.scrollTop += 1; // Auto scroll down
             }
         }
 
@@ -529,6 +338,18 @@
         document.addEventListener("DOMContentLoaded", function() {
             // Start the auto-scrolling and duplicate process
             setInterval(autoScrollTable, 50); // Call autoScrollTable every 10 milliseconds
+        });
+
+        // DataTables initialization
+        $(document).ready(function() {
+            $('#inboundTable').DataTable({
+                paging: false,
+                searching: false,
+                ordering: true,
+                info: false,
+                lengthChange: false,
+                autoWidth: false
+            });
         });
     </script>
 </body>
