@@ -114,7 +114,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="company">{{ __('Company') }}</label>
-                                    <select id="company" name="company" class="form-control" required disabled>
+                                    <select id="company" name="company" class="form-control" required>
                                         <option value="TESCO" selected>TESCO</option>
                                     </select>
                                     <div class="invalid-feedback">
