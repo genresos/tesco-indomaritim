@@ -108,8 +108,8 @@ class WarehouseController extends StislaController
                 ->update([
                     'status' => $status,
                     'updated_at' => Carbon::now(),
-                    'arrival_date' => ($request->status == 'Received') ? now()->format('Y-m-d') : null,
-                    'arrival_time' => ($request->status == 'Received') ? now()->format('H:i:s') : null,
+                    'arrival_date' => ($request->status == 'Received' || $request->status == 'Received Late' || $request->status == 'Partial') ? now()->format('Y-m-d') : null,
+                    'arrival_time' => ($request->status == 'Received' || $request->status == 'Received Late' || $request->status == 'Partial') ? now()->format('H:i:s') : null,
                     'updated_by' => Auth::id()  // Pastikan ada kolom untuk menyimpan siapa yang melakukan update
                 ]);
 
