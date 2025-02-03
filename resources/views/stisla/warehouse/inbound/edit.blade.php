@@ -33,6 +33,7 @@
                                         <option value="Partial">Partial</option>
                                         <option value="Received">Received</option>
                                         <option value="Delay">Delay</option>
+                                        <option value="Canceled">Canceled</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Please select a status.
