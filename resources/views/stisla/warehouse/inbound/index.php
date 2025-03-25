@@ -378,7 +378,7 @@
 
         // Function to open modal
         function openModal(qr_combination, status) {
-            if (status === 'Delay' || status === 'Received' || status === 'Partial') {
+            if (status === 'Received' || status === 'Partial') {
                 return;
             }
             var qrImage = document.getElementById('qrImage');
