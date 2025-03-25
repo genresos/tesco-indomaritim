@@ -37,11 +37,35 @@ class WarehouseController extends StislaController
             ->select('wi.*', 'creator.name as creator', 'updater.name as updater')
             ->where(function ($query) {
                 $query->whereDate('wi.est_date', '=', now()->toDateString())
-                    ->orWhere('wi.status', '=', 'New');
+                    ->orWhere('wi.status', '=', 'New')
+                    ->orWhere('wi.status', '=', 'Delay');
             })
             ->orderByRaw("CASE WHEN wi.status = 'New' THEN 0 ELSE 1 END")
             ->orderByDesc('wi.id')
             ->get();
+
+        $filteredData = $data->filter(function ($item) {
+            return $item->est_date < now()->toDateString();
+        });
+
+        DB::beginTransaction();
+        try {
+            foreach ($filteredData as $item) {
+                // Proses item di sini, misalnya menampilkan atau menggunakan data
+
+                DB::table('warehouse_inbound')->where('id', $item->id)->update([
+                    'status' => 'Delay',
+                ]);
+            }
+
+
+            // Commit Transaction
+            DB::commit();
+        } catch (Exception $e) {
+            // Rollback Transaction
+            DB::rollback();
+        }
+
 
         return view('stisla.warehouse.inbound.index', ['data' => $data]);
     }
